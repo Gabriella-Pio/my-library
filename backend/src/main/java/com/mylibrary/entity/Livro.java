@@ -21,6 +21,7 @@ public class Livro {
   @Column(nullable = false)
   private String autor;
 
+  @NotBlank
   @Pattern(regexp = "^[0-9\\-]{10,20}$")
   @Column(unique = true, nullable = false, length = 20)
   private String isbn;
