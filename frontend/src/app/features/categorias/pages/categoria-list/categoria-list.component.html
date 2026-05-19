@@ -1,0 +1,137 @@
+<div class="main-container">
+
+  <header class="hero-section">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1 class="hero-title">
+          Gerencie suas <span>Categorias</span>
+        </h1>
+        <p class="hero-subtitle">
+          Organize os livros da sua biblioteca.
+        </p>
+      </div>
+
+      <div class="search-block">
+        <label class="search-label">
+          Buscar categoria
+        </label>
+
+        <div class="search-container">
+          <input type="text" class="form-input" placeholder="Buscar categoria..." [(ngModel)]="termoBusca" autocomplete="off" />
+
+          @if (termoBusca) {
+          <button class="clear-btn" (click)="termoBusca = ''" aria-label="Limpar busca">
+            <mat-icon>close</mat-icon>
+          </button>
+          }
+        </div>
+      </div>
+    </div>
+  </header>
+
+  @if (loading) {
+  <div class="loading-state">
+    <div class="spinner"></div>
+    <p>Carregando categorias...</p>
+  </div>
+  }
+
+  @if (!loading && categoriasFiltradas.length === 0 && !termoBusca) {
+  <div class="empty-state">
+    <mat-icon class="empty-icon">
+      category
+    </mat-icon>
+    <p class="empty-title">
+      Nenhuma categoria cadastrada
+    </p>
+    <p class="empty-desc">
+      Crie sua primeira categoria para organizar os livros.
+    </p>
+
+    <a routerLink="/categorias/nova" class="btn-primary">
+      <mat-icon>add</mat-icon>
+      Criar categoria
+    </a>
+  </div>
+  }
+
+  @if (!loading && categoriasFiltradas.length === 0 && termoBusca) {
+  <div class="empty-state">
+    <mat-icon class="empty-icon">
+      search
+    </mat-icon>
+    <p class="empty-title">
+      Nenhum resultado encontrado
+    </p>
+    <p class="empty-desc">
+      Não encontramos categorias com
+      <strong>"{{ termoBusca }}"</strong>.
+    </p>
+  </div>
+  }
+
+  @if (!loading && categoriasFiltradas.length > 0) {
+  <div class="categoria-grid">
+
+    @for (categoria of categoriasFiltradas; track categoria.id) {
+    <div class="categoria-card">
+      <div class="categoria-card-header">
+        <div class="categoria-icon">
+          <mat-icon>category</mat-icon>
+        </div>
+        <span class="livro-badge">
+          <mat-icon>menu_book</mat-icon>
+          {{ categoria.quantidadeLivros }}
+
+          @if (categoria.quantidadeLivros === 1) {
+          livro
+          } @else {
+          livros
+          }
+        </span>
+      </div>
+
+      <div class="categoria-content">
+        <div>
+          <h2 class="categoria-title">
+            {{ categoria.nome }}
+          </h2>
+          <p class="categoria-description">
+            {{ categoria.descricao || 'Sem descrição cadastrada.' }}
+          </p>
+        </div>
+
+        <div class="categoria-footer">
+          <div class="categoria-actions">
+            <a [routerLink]="['/categorias/editar', categoria.id]" class="btn-tertiary action-btn">
+              <mat-icon>edit</mat-icon>
+              Editar
+            </a>
+            <button class="btn-tertiary btn-danger action-btn" (click)="deletarCategoria(categoria.id)">
+              <mat-icon>delete</mat-icon>
+              Excluir
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+
+    <a routerLink="/categorias/nova" class="categoria-card categoria-card-create">
+      <div class="create-content">
+        <div class="create-icon">
+          <mat-icon>add</mat-icon>
+        </div>
+        <div>
+          <h2 class="create-title">
+            Nova Categoria
+          </h2>
+          <p class="create-description">
+            Crie uma nova categoria para organizar sua biblioteca.
+          </p>
+        </div>
+      </div>
+    </a>
+  </div>
+  }
+</div>
