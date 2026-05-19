@@ -1,0 +1,101 @@
+<div class="main-container">
+
+  <header class="hero-section">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1 class="hero-title">
+          @if (modoEdicao) {
+          Editar <span>Categoria</span>
+          }
+
+          @if (!modoEdicao) {
+          Nova <span>Categoria</span>
+          }
+        </h1>
+
+        <p class="hero-subtitle">
+          @if (modoEdicao) {
+          Atualize as informações da categoria.
+          }
+
+          @if (!modoEdicao) {
+          Crie uma nova categoria para organizar sua biblioteca.
+          }
+        </p>
+      </div>
+    </div>
+  </header>
+
+  @if (loading) {
+  <div class="loading-state">
+    <div class="spinner"></div>
+    <p>Carregando categoria...</p>
+  </div>
+  }
+
+  @if (!loading) {
+  <div class="form-wrapper">
+    <form [formGroup]="form" (ngSubmit)="salvar()" class="categoria-form">
+      <div class="form-group">
+        <label class="form-label">
+          Nome da categoria
+          <span class="form-required">*</span>
+        </label>
+        <input type="text" class="form-input" placeholder="Ex: Fantasia" formControlName="nome" [class.is-invalid]="
+            nome?.invalid &&
+            nome?.touched
+          " />
+
+        @if (nome?.errors?.['required'] && nome?.touched) {
+        <span class="error-message">
+          O nome da categoria é obrigatório.
+        </span>
+        }
+
+        @if (nome?.errors?.['minlength'] && nome?.touched) {
+        <span class="error-message">
+          O nome deve ter no mínimo 3 caracteres.
+        </span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">
+          Descrição
+        </label>
+        <textarea rows="5" class="form-textarea" placeholder="Descreva a categoria..." formControlName="descricao" [class.is-invalid]="
+            descricao?.invalid &&
+            descricao?.touched
+          "></textarea>
+      </div>
+
+      <div class="form-actions">
+        <a routerLink="/categorias" class="btn-secondary">
+          <mat-icon>arrow_back</mat-icon>
+          Cancelar
+        </a>
+
+        <button type="submit" class="btn-primary" [disabled]="salvando">
+
+          @if (!salvando) {
+          <mat-icon>save</mat-icon>
+
+          @if (modoEdicao) {
+          Salvar alterações
+          }
+
+          @if (!modoEdicao) {
+          Criar categoria
+          }
+          <!-- </> -->
+          }
+
+          @if (salvando) {
+          Salvando...
+          }
+        </button>
+      </div>
+    </form>
+  </div>
+  }
+</div>

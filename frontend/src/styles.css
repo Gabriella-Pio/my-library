@@ -4,9 +4,9 @@
 /* Variáveis Globais do Projeto */
 :root {
   /* Cores de Marca e Identidade */
-  --primary-color: #e65c00;
-  --primary-hover: #cc5200;
-  --background-color: #fdf8f3;
+  --primary-color: #7c3aed;
+  --primary-hover: #6d28d9;
+  --background-color: #faf9ff;
   --surface-color: #ffffff;
 
   /* Cores de Texto e Hierarquia */
@@ -84,7 +84,7 @@ button mat-icon,
   text-align: center;
   padding: 5rem 2rem;
   width: 100%;
-  max-width: 850px;
+  max-width: 1100px;
   margin: 0 auto;
   background: var(--surface-color);
   border-radius: var(--radius-main);
@@ -138,7 +138,7 @@ button mat-icon,
 }
 
 .btn-tertiary:hover {
-  background-color: rgba(230, 92, 0, 0.08);
+  background-color: rgba(124, 58, 237, 0.10);
 }
 
 .btn-primary {
@@ -181,7 +181,7 @@ button mat-icon,
   display: flex;
   justify-content: flex-end;
   width: 100%;
-  max-width: 850px;
+  max-width: 1100px;
   margin: 0 auto 1.5rem auto;
   box-sizing: border-box;
 }
@@ -195,15 +195,21 @@ button mat-icon,
   box-sizing: border-box;
 }
 
+.content-width {
+  width: 100%;
+  max-width: 850px;
+  margin: 0 auto;
+}
+
 .hero-section {
-  background-color: #fffbf7;
-  border: 1px solid #ffebd9;
+  background-color: var(--surface-color);
+  border: 1px solid var(--border-color);
   border-radius: 24px;
   padding: 3.5rem 2rem;
   margin-bottom: 2.5rem;
   box-shadow: var(--shadow-sm);
   width: 100%;
-  max-width: 850px;
+  max-width: 1100px;
   margin-left: auto;
   margin-right: auto;
   box-sizing: border-box;
@@ -366,7 +372,7 @@ button mat-icon,
 .form-required {
   color: var(--color-error);
 }
-  
+
 /* Snackbar de sucesso */
 .success-snackbar {
   background-color: var(--color-success) !important;
