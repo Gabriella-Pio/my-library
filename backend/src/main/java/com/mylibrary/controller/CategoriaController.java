@@ -42,6 +42,25 @@ public class CategoriaController {
         .body(categoriaCriada);
   }
 
+  @GetMapping("/{id}")
+  public ResponseEntity<CategoriaResponseDTO> buscarCategoriaPorId(
+      @PathVariable Long id) {
+
+    CategoriaResponseDTO categoria = categoriaService.buscarCategoriaDTO(id);
+
+    return ResponseEntity.ok(categoria);
+  }
+
+  @PutMapping("/{id}")
+  public ResponseEntity<CategoriaResponseDTO> atualizarCategoria(
+      @PathVariable Long id,
+      @Valid @RequestBody CategoriaRequestDTO dto) {
+
+    CategoriaResponseDTO categoriaAtualizada = categoriaService.atualizarCategoria(id, dto);
+
+    return ResponseEntity.ok(categoriaAtualizada);
+  }
+
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deletarCategoria(
       @PathVariable Long id) {

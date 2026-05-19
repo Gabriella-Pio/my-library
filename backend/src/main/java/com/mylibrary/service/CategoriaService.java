@@ -27,12 +27,14 @@ public class CategoriaService {
     List<Categoria> categorias = categoriaRepository.findAll();
 
     return categorias.stream()
-        .map(categoria -> new CategoriaResponseDTO(
-            categoria.getId(),
-            categoria.getNome(),
-            categoria.getDescricao(),
-            (long) categoria.getLivros().size()))
+        .map(this::converterParaDTO)
         .toList();
+  }
+
+  @Transactional(readOnly = true)
+  public CategoriaResponseDTO buscarCategoriaDTO(Long id) {
+    Categoria categoria = buscarCategoriaPorId(id);
+    return converterParaDTO(categoria);
   }
 
   @Transactional
@@ -46,11 +48,29 @@ public class CategoriaService {
 
     Categoria categoriaSalva = categoriaRepository.save(categoria);
 
-    return new CategoriaResponseDTO(
-        categoriaSalva.getId(),
-        categoriaSalva.getNome(),
-        categoriaSalva.getDescricao(),
-        0L);
+    return converterParaDTO(categoriaSalva);
+  }
+
+  @Transactional
+  public CategoriaResponseDTO atualizarCategoria(
+      Long id,
+      CategoriaRequestDTO dto) {
+
+    Categoria categoria = buscarCategoriaPorId(id);
+
+    if (!categoria.getNome().equals(dto.nome())
+        && categoriaRepository.existsByNome(dto.nome())) {
+
+      throw new BusinessException(
+          "Já existe uma categoria cadastrada com esse nome");
+    }
+
+    categoria.setNome(dto.nome());
+    categoria.setDescricao(dto.descricao());
+
+    Categoria categoriaAtualizada = categoriaRepository.save(categoria);
+
+    return converterParaDTO(categoriaAtualizada);
   }
 
   @Transactional
@@ -66,8 +86,16 @@ public class CategoriaService {
     categoriaRepository.delete(categoria);
   }
 
-  private void validarNomeDuplicado(String nome) {
+  private CategoriaResponseDTO converterParaDTO(
+      Categoria categoria) {
+    return new CategoriaResponseDTO(
+        categoria.getId(),
+        categoria.getNome(),
+        categoria.getDescricao(),
+        (long) categoria.getLivros().size());
+  }
 
+  private void validarNomeDuplicado(String nome) {
     if (categoriaRepository.existsByNome(nome)) {
       throw new BusinessException(
           "Já existe uma categoria cadastrada com esse nome");
@@ -75,7 +103,6 @@ public class CategoriaService {
   }
 
   private Categoria buscarCategoriaPorId(Long id) {
-
     return categoriaRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException(
             "Categoria não encontrada"));
