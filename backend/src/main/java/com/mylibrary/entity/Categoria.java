@@ -2,6 +2,7 @@ package com.mylibrary.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,7 +22,7 @@ public class Categoria {
   private String descricao;
 
   @OneToMany(mappedBy = "categoria", fetch = FetchType.LAZY)
-  private List<Livro> livros;
+  private List<Livro> livros = new ArrayList<>();
 
   public Categoria() {
   }
