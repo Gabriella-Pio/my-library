@@ -12,13 +12,16 @@
         </p>
       </div>
 
-      <div class="filters-block">
+      <div class="search-block">
+        <label class="search-label">
+          Buscar título ou autor
+        </label>
 
         <div class="search-container">
           <input type="text" class="form-input" placeholder="Buscar por título ou autor..." [(ngModel)]="termoBusca" (ngModelChange)="onFiltroChange()" autocomplete="off" />
 
           @if (termoBusca) {
-          <button class="clear-btn" (click)="limparFiltros()">
+          <button class="btn-clear" (click)="limparFiltros()">
             <mat-icon>close</mat-icon>
           </button>
           }
@@ -50,7 +53,7 @@
           </div>
 
           <div class="filters-actions">
-            <button type="button" class="btn-secondary filters-clear-btn" (click)="limparFiltros()">
+            <button type="button" class="btn-secondary btn-clear-filters" (click)="limparFiltros()">
               Limpar filtros
             </button>
           </div>
@@ -68,57 +71,82 @@
   </div>
   }
 
-  @if (!loading && livros.length === 0) {
+  @if (!loading && livros.length === 0 && !termoBusca) {
   <div class="empty-state">
     <mat-icon class="empty-icon">menu_book</mat-icon>
     <p class="empty-title">Nenhum livro encontrado</p>
+    <p class="empty-desc">
+      Cadastre seu primeiro livro para começar.
+    </p>
+
+    <a routerLink="/livros/novo" class="btn-primary">
+      <mat-icon>add</mat-icon>
+      Cadastrar livro
+    </a>
   </div>
   }
 
+
+  @if (!loading && livros.length === 0 && termoBusca) {
+  <div class="empty-state">
+    <mat-icon class="empty-icon">
+      search
+    </mat-icon>
+    <p class="empty-title">
+      Nenhum resultado encontrado
+    </p>
+    <p class="empty-desc">
+      Não encontramos livros com
+      <strong>"{{ termoBusca }}"</strong>.
+    </p>
+  </div>
+  }
+
+
   @if (!loading && livros.length > 0) {
-  <div class="livro-grid">
+  <div class="main-grid">
 
     @for (livro of livros; track livro.id) {
-    <div class="livro-card">
-      <div class="livro-card-header">
-        <div class="livro-icon">
+    <div class="base-card">
+      <div class="base-card-header">
+        <div class="base-icon">
           <mat-icon>book</mat-icon>
         </div>
 
-        <span class="status-badge" [ngClass]="obterStatusBadgeClass(livro.status)">
+        <span class="badge" [ngClass]="obterStatusBadgeClass(livro.status)">
           {{ livro.status }}
         </span>
       </div>
 
-      <div class="livro-content">
-        <h2 class="livro-title">{{ livro.titulo }}</h2>
+      <div>
+        <h2 class="section-title">{{ livro.titulo }}</h2>
 
-        <p class="livro-author">
+        <p class="section-description">
           <mat-icon>person</mat-icon>
           {{ livro.autor }}
         </p>
 
-        <p class="livro-meta">
+        <p class="section-description">
           <mat-icon>category</mat-icon>
           {{ livro.categoriaNome }}
         </p>
 
-        <p class="livro-meta">
+        <p class="section-description">
           <mat-icon>calendar_today</mat-icon>
           {{ livro.ano }}
         </p>
 
-        <p class="livro-isbn">
+        <p class="section-description-light">
           ISBN: {{ livro.isbn }}
         </p>
 
-        <div class="livro-actions">
-          <a [routerLink]="['/livros/editar', livro.id]" class="btn-tertiary action-btn">
+        <div class="card-actions">
+          <a [routerLink]="['/livros/editar', livro.id]" class="btn-tertiary btn-action">
             <mat-icon>edit</mat-icon>
             Editar
           </a>
 
-          <button class="btn-tertiary btn-danger action-btn" (click)="deletarLivro(livro)" [disabled]="livro.status !== Status.DISPONIVEL">
+          <button class="btn-tertiary btn-danger btn-action" (click)="deletarLivro(livro)" [disabled]="livro.status !== Status.DISPONIVEL">
             <mat-icon>delete</mat-icon>
             Excluir
           </button>
@@ -127,7 +155,7 @@
     </div>
     }
 
-    <a routerLink="/livros/novo" class="livro-card create-card">
+    <a routerLink="/livros/novo" class="base-card create-card">
       <div class="create-content">
         <div class="create-icon">
           <mat-icon>add</mat-icon>

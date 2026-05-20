@@ -83,8 +83,8 @@
 }
 
 .collapse-btn:hover {
-  background-color: rgba(124, 58, 237, 0.06);
-  border-color: rgba(124, 58, 237, 0.2);
+  background-color: var(--primary-soft);
+  border-color: var(--primary-border-soft);
 
   color: var(--primary-color);
 }
@@ -119,13 +119,13 @@
 }
 
 .nav-item:hover {
-  background-color: rgba(124, 58, 237, 0.06);
+  background-color: var(--primary-soft);
   color: var(--text-main);
 }
 
 /* Active item */
 .nav-item.active {
-  background-color: rgba(124, 58, 237, 0.12);
+  background-color: var(--primary-soft);
   color: var(--primary-color);
 }
 

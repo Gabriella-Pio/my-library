@@ -1,0 +1,40 @@
+/* empty-state.css */
+
+.empty-state {
+  text-align: center;
+  padding: 5rem 2rem;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  background: var(--surface-color);
+  border-radius: var(--radius-main);
+  border: 1.5px dashed var(--border-color);
+  box-sizing: border-box;
+}
+
+.empty-icon {
+  margin: 0 auto 1rem;
+  opacity: 0.45;
+}
+
+.empty-title {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.empty-desc {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 1.75rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 640px) {
+  .empty-state {
+    padding: 3rem 1.25rem;
+  }
+}

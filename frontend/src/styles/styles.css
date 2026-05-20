@@ -1,0 +1,25 @@
+@import '../styles/abstracts/variables.css';
+
+@import '../styles/base/reset.css';
+@import '../styles/base/typography.css';
+@import '../styles/base/globals.css';
+ 
+@import '../styles/layouts/containers.css';
+@import '../styles/layouts/grid.css';
+@import '../styles/layouts/sections.css';
+
+@import '../styles/components/buttons.css';
+@import '../styles/components/forms.css';
+@import '../styles/components/search.css';
+@import '../styles/components/cards.css';
+@import '../styles/components/hero.css';
+@import '../styles/components/filters.css';
+@import '../styles/components/badges.css';
+@import '../styles/components/empty-state.css';
+@import '../styles/components/loading.css';
+
+@import '../styles/feedback/snackbar.css';
+
+
+/* onde importar/ que arquivo? */
+/* @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,700;9..144,800&display=swap'); */

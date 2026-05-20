@@ -1,0 +1,11 @@
+/* snackbar.css */
+
+.success-snackbar {
+  background-color: var(--color-success) !important;
+  color: white !important;
+}
+
+.success-snackbar .mdc-snackbar__label {
+  color: white !important;
+  font-weight: 600;
+}
