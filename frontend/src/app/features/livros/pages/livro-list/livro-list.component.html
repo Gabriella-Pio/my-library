@@ -1,0 +1,146 @@
+<div class="main-container">
+
+  <header class="hero-section">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1 class="hero-title">
+          Gerencie seus <span>Livros</span>
+        </h1>
+
+        <p class="hero-subtitle">
+          Organize e acompanhe todos os livros da sua biblioteca.
+        </p>
+      </div>
+
+      <div class="filters-block">
+
+        <div class="search-container">
+          <input type="text" class="form-input" placeholder="Buscar por título ou autor..." [(ngModel)]="termoBusca" (ngModelChange)="onFiltroChange()" autocomplete="off" />
+
+          @if (termoBusca) {
+          <button class="clear-btn" (click)="limparFiltros()">
+            <mat-icon>close</mat-icon>
+          </button>
+          }
+        </div>
+
+        <div class="filters-row">
+
+          <div class="filter-group">
+            <label class="filter-label">Categoria</label>
+            <select class="form-select" [(ngModel)]="categoriaFiltro" (ngModelChange)="onFiltroChange()">
+              <option [ngValue]="null">Todas</option>
+
+              @for (categoria of categorias; track categoria.id) {
+              <option [ngValue]="categoria.id">
+                {{ categoria.nome }}
+              </option>
+              }
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label class="filter-label">Status</label>
+            <select class="form-select" [(ngModel)]="statusFiltro" (ngModelChange)="onFiltroChange()">
+              <option [ngValue]="null">Todos</option>
+              <option [ngValue]="Status.DISPONIVEL">Disponível</option>
+              <option [ngValue]="Status.EMPRESTADO">Emprestado</option>
+              <option [ngValue]="Status.RESERVADO">Reservado</option>
+            </select>
+          </div>
+
+          <div class="filters-actions">
+            <button type="button" class="btn-secondary filters-clear-btn" (click)="limparFiltros()">
+              Limpar filtros
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  @if (loading) {
+  <div class="loading-state">
+    <div class="spinner"></div>
+    <p>Carregando livros...</p>
+  </div>
+  }
+
+  @if (!loading && livros.length === 0) {
+  <div class="empty-state">
+    <mat-icon class="empty-icon">menu_book</mat-icon>
+    <p class="empty-title">Nenhum livro encontrado</p>
+  </div>
+  }
+
+  @if (!loading && livros.length > 0) {
+  <div class="livro-grid">
+
+    @for (livro of livros; track livro.id) {
+    <div class="livro-card">
+      <div class="livro-card-header">
+        <div class="livro-icon">
+          <mat-icon>book</mat-icon>
+        </div>
+
+        <span class="status-badge" [ngClass]="obterStatusBadgeClass(livro.status)">
+          {{ livro.status }}
+        </span>
+      </div>
+
+      <div class="livro-content">
+        <h2 class="livro-title">{{ livro.titulo }}</h2>
+
+        <p class="livro-author">
+          <mat-icon>person</mat-icon>
+          {{ livro.autor }}
+        </p>
+
+        <p class="livro-meta">
+          <mat-icon>category</mat-icon>
+          {{ livro.categoriaNome }}
+        </p>
+
+        <p class="livro-meta">
+          <mat-icon>calendar_today</mat-icon>
+          {{ livro.ano }}
+        </p>
+
+        <p class="livro-isbn">
+          ISBN: {{ livro.isbn }}
+        </p>
+
+        <div class="livro-actions">
+          <a [routerLink]="['/livros/editar', livro.id]" class="btn-tertiary action-btn">
+            <mat-icon>edit</mat-icon>
+            Editar
+          </a>
+
+          <button class="btn-tertiary btn-danger action-btn" (click)="deletarLivro(livro)" [disabled]="livro.status !== Status.DISPONIVEL">
+            <mat-icon>delete</mat-icon>
+            Excluir
+          </button>
+        </div>
+      </div>
+    </div>
+    }
+
+    <a routerLink="/livros/novo" class="livro-card create-card">
+      <div class="create-content">
+        <div class="create-icon">
+          <mat-icon>add</mat-icon>
+        </div>
+
+        <div>
+          <h2 class="create-title">Novo Livro</h2>
+          <p class="create-description">
+            Adicione um novo livro à sua biblioteca.
+          </p>
+        </div>
+      </div>
+    </a>
+  </div>
+  }
+</div>

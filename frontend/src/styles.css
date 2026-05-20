@@ -1,7 +1,25 @@
+@import './styles/abstracts/variables.css';
+
+@import './styles/base/reset.css';
+@import './styles/base/typography.css';
+@import './styles/base/globals.css';
+
+@import './styles/layouts/containers.css';
+@import './styles/layouts/grid.css';
+@import './styles/layouts/toolbar.css';
+
+@import './styles/components/buttons.css';
+@import './styles/components/forms.css';
+@import './styles/components/cards.css';
+@import './styles/components/hero.css';
+@import './styles/components/badges.css';
+@import './styles/components/empty-state.css';
+@import './styles/components/loading.css';
+
 /* FONTE — importar antes de tudo */
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,700;9..144,800&display=swap');
 
-/* Variáveis Globais do Projeto */
+Variáveis Globais do Projeto
 :root {
   /* Cores de Marca e Identidade */
   --primary-color: #7c3aed;
@@ -164,6 +182,14 @@ button mat-icon,
 .btn-secondary:hover {
   background-color: #f3f4f6;
   border-color: var(--text-main);
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
 }
 
 /* Delete/Danger Button */
@@ -332,6 +358,11 @@ button mat-icon,
     justify-content: center;
   }
 
+  .filters-actions {
+    max-width: 100%;
+    flex: 1 1 100%;
+  }
+
   .hero-section {
     padding: 2.5rem 1.25rem;
     border-radius: 16px;
@@ -392,6 +423,29 @@ button mat-icon,
   margin-bottom: 1.75rem;
 }
 
+.filters-actions {
+  min-width: 160px;
+  max-width: 190px;
+  flex: 0 0 180px;
+  display: flex;
+  align-items: flex-end;
+}
+
+.filters-clear-btn {
+  width: 100%;
+  justify-content: center;
+  padding: 0.65rem 1rem;
+  min-height: 46px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  background: #f8fafc;
+}
+
+.filters-clear-btn:hover {
+  background: #eef2ff;
+  border-color: rgba(124, 58, 237, 0.25);
+}
+
 /* Botões de Ação - Padrão para formulários */
 .form-actions {
   display: flex;
@@ -450,6 +504,87 @@ button mat-icon,
   font-size: 1.25rem;
   width: 1.25rem;
   height: 1.25rem;
+}
+
+/* Create card */
+.create-card {
+  text-decoration: none;
+  border: 2px dashed rgba(124, 58, 237, 0.32);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(124, 58, 237, 0.08),
+      rgba(99, 102, 241, 0.04)
+    );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 280px;
+  box-shadow: 0 1px 0 rgba(124, 58, 237, 0.04) inset;
+  transition:
+    transform 0.15s ease,
+    border-color 0.15s ease,
+    background 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.create-card:hover {
+  transform: translateY(-3px);
+
+  border-color: rgba(124, 58, 237, 0.55);
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(124, 58, 237, 0.12),
+      rgba(99, 102, 241, 0.06)
+    );
+
+  box-shadow:
+    0 16px 32px -16px rgba(124, 58, 237, 0.34);
+}
+
+.create-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.25rem;
+  max-width: 240px;
+}
+
+.create-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 22px;
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.18), rgba(99, 102, 241, 0.12));
+  border: 1px solid rgba(124, 58, 237, 0.18);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.create-icon mat-icon {
+  font-size: 2rem;
+  width: 2rem;
+  height: 2rem;
+  color: var(--primary-color);
+}
+
+.create-title {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 0.45rem;
+  letter-spacing: -0.02em;
+}
+
+.create-description {
+  color: var(--text-muted);
+  line-height: 1.6;
+  font-size: 0.92rem;
 }
 
 /* Loading State */
