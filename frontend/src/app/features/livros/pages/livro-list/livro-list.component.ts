@@ -22,8 +22,11 @@ export class LivroListComponent implements OnInit {
   livros: Livro[] = [];
   categorias: Categoria[] = [];
 
+  // Termo de busca
   termoBusca = '';
+  // Filtro por categoria
   categoriaFiltro: number | null = null;
+  // Filtro por status
   statusFiltro: Status | null = null;
 
   loading = true;
