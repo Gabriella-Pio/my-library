@@ -16,6 +16,15 @@ export class LivroService {
     return this.http.get<Livro[]>(this.apiUrl);
   }
 
+  /**
+   * Busca e Filtros
+   *
+   * Aceita categoriaId (filtro por categoria)
+   * Aceita status (DISPONIVEL/EMPRESTADO)
+   * Aceita termo (busca por título ou autor)
+   * Todos os parâmetros são opcionais - envia para backend apenas os filtros ativos
+   *
+   */
   listarComFiltros(
     categoriaId?: number,
     status?: Status,
