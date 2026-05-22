@@ -1,0 +1,128 @@
+<div class="main-container">
+  <header class="hero-section">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1 class="hero-title">
+          @if (emprestimo) {
+          Detalhes do <span>Empréstimo</span>
+          }
+        </h1>
+
+        <p class="hero-subtitle">
+          Veja as informações completas do empréstimo selecionado.
+        </p>
+      </div>
+    </div>
+  </header>
+
+  @if (loading) {
+  <div class="loading-state">
+    <div class="spinner"></div>
+    <p>Carregando detalhes...</p>
+  </div>
+  }
+
+  @if (!loading && emprestimo) {
+  <div class="form-wrapper">
+    <div class="main-grid">
+      <section class="base-card">
+        <div class="base-card-header">
+          <div class="base-icon">
+            <mat-icon>menu_book</mat-icon>
+          </div>
+
+          <span class="badge" [ngClass]="statusClasse">
+            <mat-icon>
+              {{ emprestimo.dataDevolucaoEfetiva ? 'check_circle' : 'schedule' }}
+            </mat-icon>
+            {{ statusTexto }}
+          </span>
+        </div>
+
+        <div class="card-content">
+          <div>
+            <h2 class="section-title">{{ emprestimo.livroTitulo }}</h2>
+            <p class="section-description">
+              Empréstimo realizado para
+              <strong>{{ emprestimo.nomePessoa }}</strong>
+            </p>
+          </div>
+
+          <div class="card-list">
+            <div class="section-description">
+              <mat-icon>fingerprint</mat-icon>
+              <span>ID do empréstimo: {{ emprestimo.id }}</span>
+            </div>
+
+            <div class="section-description">
+              <mat-icon>phone</mat-icon>
+              <span>{{ emprestimo.telefone }}</span>
+            </div>
+
+            <div class="section-description">
+              <mat-icon>calendar_today</mat-icon>
+              <span>Empréstimo: {{ emprestimo.dataEmprestimo | date:'dd/MM/yyyy' }}</span>
+            </div>
+
+            <div class="section-description">
+              <mat-icon>event</mat-icon>
+              <span>Devolução prevista: {{ emprestimo.dataDevolucaoPrevista | date:'dd/MM/yyyy' }}</span>
+            </div>
+
+            @if (emprestimo.dataDevolucaoEfetiva) {
+            <div class="section-description">
+              <mat-icon>assignment_turned_in</mat-icon>
+              <span>Devolvido em: {{ emprestimo.dataDevolucaoEfetiva | date:'dd/MM/yyyy' }}</span>
+            </div>
+            }
+          </div>
+        </div>
+      </section>
+
+      <section class="base-card">
+        <div class="base-card-header">
+          <div class="base-icon">
+            <mat-icon>person</mat-icon>
+          </div>
+          <span class="badge badge-primary">Leitor</span>
+        </div>
+
+        <div class="card-content">
+          <h2 class="section-title">Informações do leitor</h2>
+
+          <div class="card-list">
+            <div class="section-description">
+              <mat-icon>account_circle</mat-icon>
+              <span>{{ emprestimo.nomePessoa }}</span>
+            </div>
+
+            <div class="section-description">
+              <mat-icon>phone_in_talk</mat-icon>
+              <span>{{ emprestimo.telefone }}</span>
+            </div>
+
+            <div class="section-description">
+              <mat-icon>help_outline</mat-icon>
+              <span>
+                {{ emprestimo.dataDevolucaoEfetiva ? 'Empréstimo finalizado.' : 'Empréstimo ainda ativo.' }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn-secondary" (click)="voltar()">
+        <mat-icon>arrow_back</mat-icon>
+        Voltar
+      </button>
+
+      <a [routerLink]="['/emprestimos']" class="btn-primary">
+        <mat-icon>list</mat-icon>
+        Ir para lista
+      </a>
+    </div>
+  </div>
+  }
+</div>

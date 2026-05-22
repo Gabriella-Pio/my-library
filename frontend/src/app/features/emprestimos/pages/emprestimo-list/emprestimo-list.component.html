@@ -1,0 +1,193 @@
+<div class="main-container">
+
+  <header class="hero-section">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1 class="hero-title">
+          Gerencie seus <span>Empréstimos</span>
+        </h1>
+
+        <p class="hero-subtitle">
+          Organize os empréstimos da sua biblioteca.
+        </p>
+      </div>
+
+      <div class="search-block">
+        <label class="search-label">
+          Buscar empréstimo
+        </label>
+
+        <div class="search-container">
+          <input type="text" class="form-input" placeholder="Buscar por pessoa ou livro..." [(ngModel)]="termoBusca" (ngModelChange)="filtrarEmprestimos()" autocomplete="off" />
+
+          @if (termoBusca) {
+          <button class="btn-clear" (click)="limparBusca()" aria-label="Limpar busca">
+            <mat-icon>close</mat-icon>
+          </button>
+          }
+        </div>
+      </div>
+    </div>
+  </header>
+
+  @if (loading) {
+  <div class="loading-state">
+    <div class="spinner"></div>
+    <p>Carregando empréstimos...</p>
+  </div>
+  }
+
+  @if (!loading && emprestimosFiltrados.length === 0 && !termoBusca) {
+  <div class="empty-state">
+    <mat-icon class="empty-icon">
+      swap_horiz
+    </mat-icon>
+
+    <p class="empty-title">
+      Nenhum empréstimo cadastrado
+    </p>
+
+    <p class="empty-desc">
+      Realize o primeiro empréstimo da biblioteca.
+    </p>
+
+    <a routerLink="/emprestimos/novo" class="btn-primary">
+      <mat-icon>add</mat-icon>
+      Novo empréstimo
+    </a>
+  </div>
+  }
+
+  @if (!loading && emprestimosFiltrados.length === 0 && termoBusca) {
+  <div class="empty-state">
+    <mat-icon class="empty-icon">
+      search
+    </mat-icon>
+
+    <p class="empty-title">
+      Nenhum resultado encontrado
+    </p>
+
+    <p class="empty-desc">
+      Não encontramos empréstimos com
+      <strong>"{{ termoBusca }}"</strong>.
+    </p>
+  </div>
+  }
+
+  @if (!loading && emprestimosFiltrados.length > 0) {
+
+  <div class="main-grid">
+
+    @for (emprestimo of emprestimosFiltrados; track emprestimo.id) {
+
+    <div class="base-card">
+      <div class="base-card-header">
+        <div class="base-icon">
+          <mat-icon>menu_book</mat-icon>
+        </div>
+
+        <span class="badge" [ngClass]="
+                emprestimo.dataDevolucaoEfetiva
+                  ? 'badge-success'
+                  : 'badge-warning'
+              ">
+          <mat-icon>
+            {{
+            emprestimo.dataDevolucaoEfetiva
+            ? 'check_circle'
+            : 'schedule'
+            }}
+          </mat-icon>
+
+          {{
+          emprestimo.dataDevolucaoEfetiva
+          ? 'Devolvido'
+          : 'Ativo'
+          }}
+        </span>
+      </div>
+
+      <div class="card-content">
+        <div>
+          <h2 class="section-title">
+            {{ emprestimo.livroTitulo }}
+          </h2>
+
+          <p class="section-description">
+            Empréstimo para
+            <strong>{{ emprestimo.nomePessoa }}</strong>
+          </p>
+        </div>
+
+        <div class="card-list">
+          <div class="section-description">
+            <mat-icon>phone</mat-icon>
+            <span>{{ emprestimo.telefone }}</span>
+          </div>
+
+          <div class="section-description">
+            <mat-icon>calendar_today</mat-icon>
+            <span>
+              Empréstimo:
+              {{ emprestimo.dataEmprestimo | date:'dd/MM/yyyy' }}
+            </span>
+          </div>
+
+          <div class="section-description">
+            <mat-icon>event</mat-icon>
+            <span>
+              Devolução prevista:
+              {{ emprestimo.dataDevolucaoPrevista | date:'dd/MM/yyyy' }}
+            </span>
+          </div>
+
+          @if (emprestimo.dataDevolucaoEfetiva) {
+          <div class="section-description">
+            <mat-icon>assignment_turned_in</mat-icon>
+
+            <span>
+              Devolvido em:
+              {{ emprestimo.dataDevolucaoEfetiva | date:'dd/MM/yyyy' }}
+            </span>
+          </div>
+          }
+        </div>
+
+        <div class="card-actions">
+          @if (!emprestimo.dataDevolucaoEfetiva) {
+          <button class="btn-primary btn-action" (click)="devolverLivro(emprestimo.id)">
+            <mat-icon>keyboard_return</mat-icon>
+            Devolver
+          </button>
+          }
+
+          <a [routerLink]="['/emprestimos', emprestimo.id]" class="btn-tertiary btn-action">
+            <mat-icon>visibility</mat-icon>
+            Detalhes
+          </a>
+        </div>
+      </div>
+    </div>
+    }
+
+    <a routerLink="/emprestimos/novo" class="base-card create-card">
+      <div class="create-content">
+        <div class="create-icon">
+          <mat-icon>add</mat-icon>
+        </div>
+
+        <div>
+          <h2 class="create-title">
+            Novo Empréstimo
+          </h2>
+
+          <p class="create-description">
+            Registre um novo empréstimo de livro.
+          </p>
+        </div>
+      </div>
+    </a>
+  </div>
+  }
+</div>

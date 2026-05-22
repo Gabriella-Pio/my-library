@@ -6,11 +6,14 @@ import com.mylibrary.entity.Categoria;
 import com.mylibrary.entity.Livro;
 import com.mylibrary.entity.Status;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface LivroRepository extends JpaRepository<Livro, Long> {
 
   boolean existsByIsbn(String isbn);
+
+  Optional<Livro> findByIsbn(String isbn);
 
   List<Livro> findByCategoria(Categoria categoria);
 

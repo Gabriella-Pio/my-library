@@ -119,11 +119,9 @@ export class LivroListComponent implements OnInit {
   obterStatusBadgeClass(status: Status): string {
     switch (status) {
       case Status.DISPONIVEL:
-        return 'badge-disponivel';
+        return 'badge-success';
       case Status.EMPRESTADO:
-        return 'badge-emprestado';
-      case Status.RESERVADO:
-        return 'badge-reservado';
+        return 'badge-warning';
       default:
         return '';
     }
