@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mylibrary.dto.EmprestimoRequestDTO;
 import com.mylibrary.dto.EmprestimoResponseDTO;
+import com.mylibrary.exception.BusinessException;
 import com.mylibrary.entity.Emprestimo;
 import com.mylibrary.entity.Livro;
 import com.mylibrary.entity.Status;
@@ -35,18 +36,18 @@ public class EmprestimoService {
         .orElseThrow(() -> new RuntimeException("Livro não encontrado"));
 
     if (livro.getStatus() != Status.DISPONIVEL) {
-      throw new RuntimeException("Livro não está disponível para empréstimo");
+      throw new BusinessException("Livro não está disponível para empréstimo");
     }
 
     boolean possuiEmprestimoAtivo = emprestimoRepository.existsByLivroIdAndDataDevolucaoEfetivaIsNull(
         dto.livroId());
 
     if (possuiEmprestimoAtivo) {
-      throw new RuntimeException("Livro já possui empréstimo ativo");
+      throw new BusinessException("Livro já possui empréstimo ativo");
     }
 
     if (dto.dataDevolucaoPrevista().isBefore(LocalDate.now())) {
-      throw new RuntimeException(
+      throw new BusinessException(
           "A data de devolução prevista não pode ser anterior à data atual");
     }
 
@@ -75,13 +76,13 @@ public class EmprestimoService {
         .orElseThrow(() -> new RuntimeException("Empréstimo não encontrado"));
 
     if (emprestimo.getDataDevolucaoEfetiva() != null) {
-      throw new RuntimeException("Este empréstimo já foi finalizado");
+      throw new BusinessException("Este empréstimo já foi finalizado");
     }
 
     Livro livro = emprestimo.getLivro();
 
     if (livro.getStatus() == Status.DISPONIVEL) {
-      throw new RuntimeException("Livro já está disponível");
+      throw new BusinessException("Livro já está disponível");
     }
 
     emprestimo.setDataDevolucaoEfetiva(LocalDate.now());
