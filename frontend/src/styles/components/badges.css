@@ -22,17 +22,12 @@
   color: var(--primary-color);
 }
 
-.badge-disponivel {
+.badge-success {
   background: rgba(22, 163, 74, 0.1);
   color: #16a34a;
 }
 
-.badge-emprestado {
+.badge-warning {
   background: rgba(234, 179, 8, 0.1);
   color: #eab308;
-}
-
-.badge-reservado {
-  background: rgba(59, 130, 246, 0.1);
-  color: #3b82f6;
 }
