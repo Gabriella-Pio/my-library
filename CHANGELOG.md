@@ -3,6 +3,12 @@
 Todas as mudanças notáveis neste projeto serão documentadas aqui.
 Formato: https://keepachangelog.com
 
+## [1.0.1] - 2026-05-23
+
+### Fixed
+
+- Corrigida validação de exclusão de livro emprestado (#18)
+
 ## [1.0.0] - 2026-05-23
 
 ### Added
