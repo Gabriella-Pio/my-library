@@ -31,3 +31,15 @@
   background: rgba(234, 179, 8, 0.1);
   color: #eab308;
 }
+
+.badge-danger {
+  background: rgba(220, 38, 38, 0.1);
+  color: #dc2626;
+}
+
+.badge-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.45rem;
+}
