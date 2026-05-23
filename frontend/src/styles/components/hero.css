@@ -43,6 +43,13 @@
   font-size: 0.95rem;
 }
 
+.hero-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
 @media (max-width: 640px) {
   .hero-section {
     padding: 2.5rem 1.25rem;
@@ -51,5 +58,14 @@
 
   .hero-title {
     font-size: 2.1rem;
+  }
+
+  .hero-actions {
+    width: 100%;
+  }
+  
+  .hero-actions a {
+    width: 100%;
+    justify-content: center;
   }
 }

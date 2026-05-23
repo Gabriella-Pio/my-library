@@ -5,9 +5,12 @@ import { CategoriaListComponent } from './features/categorias/pages/categoria-li
 import { CategoriaFormComponent } from './features/categorias/pages/categoria-form/categoria-form.component';
 import { LivroListComponent } from './features/livros/pages/livro-list/livro-list.component';
 import { LivroFormComponent } from './features/livros/pages/livro-form/livro-form.component';
+import { LivroDetailComponent } from './features/livros/pages/livro-detail/livro-detail.component';
 import { EmprestimoListComponent } from './features/emprestimos/pages/emprestimo-list/emprestimo-list.component';
 import { EmprestimoFormComponent } from './features/emprestimos/pages/emprestimo-form/emprestimo-form.component';
 import { EmprestimoDetalheComponent } from './features/emprestimos/pages/emprestimo-detalhe/emprestimo-detalhe.component';
+import { DashboardComponent } from './features/dashboard/pages/dashboard/dashboard.component';
+import { AtrasadosListComponent } from './features/atrasados/pages/atrasados-list/atrasados-list.component';
 
 export const routes: Routes = [
   {
@@ -16,8 +19,13 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'categorias',
+        redirectTo: 'dashboard',
         pathMatch: 'full',
+      },
+
+      {
+        path: 'dashboard',
+        component: DashboardComponent,
       },
 
       {
@@ -51,6 +59,11 @@ export const routes: Routes = [
       },
 
       {
+        path: 'livros/historico/:id',
+        component: LivroDetailComponent,
+      },
+
+      {
         path: 'emprestimos',
         component: EmprestimoListComponent,
       },
@@ -63,6 +76,11 @@ export const routes: Routes = [
       {
         path: 'emprestimos/:id',
         component: EmprestimoDetalheComponent,
+      },
+
+      {
+        path: 'atrasados',
+        component: AtrasadosListComponent,
       },
     ],
   },

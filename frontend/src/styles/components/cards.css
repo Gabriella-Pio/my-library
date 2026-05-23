@@ -6,6 +6,10 @@
   height: 100%;
 }
 
+.card-content-compact {
+  gap: 0.5rem;
+}
+
 .base-card {
   background: var(--surface-color);
   border: 1px solid var(--border-color);
@@ -47,11 +51,42 @@
   color: var(--primary-color);
 }
 
+.base-icon--success {
+  background: rgba(22, 163, 74, 0.1);
+}
+
+.base-icon--success mat-icon {
+  color: #16a34a;
+}
+
+.base-icon--warning {
+  background: rgba(234, 179, 8, 0.1);
+}
+
+.base-icon--warning mat-icon {
+  color: #eab308;
+}
+
+.base-icon--danger {
+  background: rgba(220, 38, 38, 0.1);
+}
+
+.base-icon--danger mat-icon {
+  color: #dc2626;
+}
+
 .card-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.75rem;
   width: 100%;
   margin-top: 1.2rem;
+}
+
+.card-actions .btn-action {
+  flex: 1 1 0;
+  width: auto;
+  min-width: 0;
 }
 
 .card-list {
