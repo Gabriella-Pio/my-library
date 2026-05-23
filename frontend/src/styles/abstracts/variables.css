@@ -1,0 +1,40 @@
+/* variables.css */
+
+/* Variáveis Globais do Projeto */
+:root {
+  --primary-color: #7c3aed;
+  --primary-hover: #6d28d9;
+  --background-color: #faf9ff;
+  --surface-color: #ffffff;
+
+  --text-main: #1f2937;
+  --text-muted: #4b5563;
+  --text-light: #9ca3af;
+
+  --color-error: #dc2626;
+  --color-success: #16a34a;
+  --border-color: #e5e7eb;
+
+  /* TODO: realmente implementar isso aqui, ver onde está usando o rgb e colocar a variável */
+  --primary-rgb: 124, 58, 237;
+
+  --primary-soft: rgba(var(--primary-rgb), 0.08);
+  --primary-soft-hover: rgba(var(--primary-rgb), 0.12);
+  --primary-border-soft: rgba(var(--primary-rgb), 0.22);
+
+  --bg-pink: #fce7f3;
+  --text-pink: #9d174d;
+  --bg-yellow: #fef3c7;
+  --text-yellow: #92400e;
+  --bg-blue: #e0f2fe;
+  --text-blue: #0369a1;
+  --bg-purple: #e0e7ff;
+  --text-purple: #3730a3;
+
+  --radius-main: 12px;
+  --radius-badge: 9999px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
+  --font-display: 'Fraunces', Georgia, serif;
+}

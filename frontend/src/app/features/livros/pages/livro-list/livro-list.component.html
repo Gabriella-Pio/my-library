@@ -1,0 +1,178 @@
+<div class="main-container">
+
+  <header class="hero-section">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1 class="hero-title">
+          Gerencie seus <span>Livros</span>
+        </h1>
+
+        <p class="hero-subtitle">
+          Organize e acompanhe todos os livros da sua biblioteca.
+        </p>
+      </div>
+
+      <div class="search-block">
+        <label class="search-label">
+          Buscar título ou autor
+        </label>
+
+        <div class="search-container">
+          <input type="text" class="form-input" placeholder="Buscar por título ou autor..." [(ngModel)]="termoBusca" (ngModelChange)="onFiltroChange()" autocomplete="off" />
+
+          @if (termoBusca) {
+          <button class="btn-clear" (click)="limparFiltros()">
+            <mat-icon>close</mat-icon>
+          </button>
+          }
+        </div>
+
+        <div class="filters-row">
+
+          <div class="filter-group">
+            <label class="filter-label">Categoria</label>
+            <select class="form-select" [(ngModel)]="categoriaFiltro" (ngModelChange)="onFiltroChange()">
+              <option [ngValue]="null">Todas</option>
+
+              @for (categoria of categorias; track categoria.id) {
+              <option [ngValue]="categoria.id">
+                {{ categoria.nome }}
+              </option>
+              }
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label class="filter-label">Status</label>
+            <select class="form-select" [(ngModel)]="statusFiltro" (ngModelChange)="onFiltroChange()">
+              <option [ngValue]="null">Todos</option>
+              <option [ngValue]="Status.DISPONIVEL">Disponível</option>
+              <option [ngValue]="Status.EMPRESTADO">Emprestado</option>
+            </select>
+          </div>
+
+          <div class="filters-actions">
+            <button type="button" class="btn-secondary btn-clear-filters" (click)="limparFiltros()">
+              Limpar filtros
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  @if (loading) {
+  <div class="loading-state">
+    <div class="spinner"></div>
+    <p>Carregando livros...</p>
+  </div>
+  }
+
+  @if (!loading && livros.length === 0 && !termoBusca) {
+  <div class="empty-state">
+    <mat-icon class="empty-icon">menu_book</mat-icon>
+    <p class="empty-title">Nenhum livro encontrado</p>
+    <p class="empty-desc">
+      Cadastre seu primeiro livro para começar.
+    </p>
+
+    <a routerLink="/livros/novo" class="btn-primary">
+      <mat-icon>add</mat-icon>
+      Cadastrar livro
+    </a>
+  </div>
+  }
+
+
+  @if (!loading && livros.length === 0 && termoBusca) {
+  <div class="empty-state">
+    <mat-icon class="empty-icon">
+      search
+    </mat-icon>
+    <p class="empty-title">
+      Nenhum resultado encontrado
+    </p>
+    <p class="empty-desc">
+      Não encontramos livros com
+      <strong>"{{ termoBusca }}"</strong>.
+    </p>
+  </div>
+  }
+
+
+  @if (!loading && livros.length > 0) {
+  <div class="main-grid">
+
+    @for (livro of livros; track livro.id) {
+    <div class="base-card">
+      <div class="base-card-header">
+        <div class="base-icon">
+          <mat-icon>book</mat-icon>
+        </div>
+
+        <span class="badge" [ngClass]="obterStatusBadgeClass(livro.status)">
+          {{ livro.status }}
+        </span>
+      </div>
+
+      <div>
+        <h2 class="section-title">{{ livro.titulo }}</h2>
+
+        <p class="section-description">
+          <mat-icon>person</mat-icon>
+          {{ livro.autor }}
+        </p>
+
+        <p class="section-description">
+          <mat-icon>category</mat-icon>
+          {{ livro.categoriaNome }}
+        </p>
+
+        <p class="section-description">
+          <mat-icon>calendar_today</mat-icon>
+          {{ livro.ano }}
+        </p>
+
+        <p class="section-description-light">
+          ISBN: {{ livro.isbn }}
+        </p>
+
+        <div class="card-actions">
+          <a [routerLink]="['/livros/historico', livro.id]" class="btn-tertiary btn-action">
+            <mat-icon>history</mat-icon>
+            <!-- Histórico -->
+          </a>
+
+          <a [routerLink]="['/livros/editar', livro.id]" class="btn-tertiary btn-action">
+            <mat-icon>edit</mat-icon>
+            <!-- Editar -->
+          </a>
+
+          <button class="btn-tertiary btn-danger btn-action" (click)="deletarLivro(livro)" [disabled]="livro.status !== Status.DISPONIVEL">
+            <mat-icon>delete</mat-icon>
+            <!-- Excluir -->
+          </button>
+        </div>
+      </div>
+    </div>
+    }
+
+    <a routerLink="/livros/novo" class="base-card create-card">
+      <div class="create-content">
+        <div class="create-icon">
+          <mat-icon>add</mat-icon>
+        </div>
+
+        <div>
+          <h2 class="create-title">Novo Livro</h2>
+          <p class="create-description">
+            Adicione um novo livro à sua biblioteca.
+          </p>
+        </div>
+      </div>
+    </a>
+  </div>
+  }
+</div>

@@ -1,0 +1,63 @@
+<aside class="sidebar" [class.collapsed]="isCollapsed">
+
+  <div class="sidebar-header">
+
+    @if (!isCollapsed) {
+    <h1 class="logo">
+      My<span>Library</span>
+    </h1>
+    }
+
+    <button class="collapse-btn" type="button" (click)="toggleSidebar()" aria-label="Alternar sidebar">
+      <mat-icon>
+        {{ isCollapsed ? 'chevron_right' : 'chevron_left' }}
+      </mat-icon>
+    </button>
+
+  </div>
+
+  <nav class="sidebar-nav">
+
+    <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
+      <mat-icon>dashboard</mat-icon>
+
+      @if (!isCollapsed) {
+      <span>Dashboard</span>
+      }
+    </a>
+
+    <a routerLink="/categorias" routerLinkActive="active" class="nav-item">
+      <mat-icon>category</mat-icon>
+
+      @if (!isCollapsed) {
+      <span>Categorias</span>
+      }
+    </a>
+
+    <a routerLink="/livros" routerLinkActive="active" class="nav-item">
+      <mat-icon>menu_book</mat-icon>
+
+      @if (!isCollapsed) {
+      <span>Livros</span>
+      }
+    </a>
+
+    <a routerLink="/emprestimos" routerLinkActive="active" class="nav-item">
+      <mat-icon>swap_horiz</mat-icon>
+
+      @if (!isCollapsed) {
+      <span>Empréstimos</span>
+      }
+    </a>
+
+    <a routerLink="/atrasados" routerLinkActive="active" class="nav-item">
+      <mat-icon>warning</mat-icon>
+
+      @if (!isCollapsed) {
+      <span>Atrasados</span>
+      }
+    </a>
+
+  </nav>
+
+</aside>
