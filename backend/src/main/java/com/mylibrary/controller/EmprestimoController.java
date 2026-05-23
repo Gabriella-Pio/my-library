@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.mylibrary.dto.EmprestimoRequestDTO;
 import com.mylibrary.dto.EmprestimoResponseDTO;
+import com.mylibrary.dto.AtrasadoDTO;
 import com.mylibrary.service.EmprestimoService;
 
 import jakarta.validation.Valid;
@@ -32,6 +33,12 @@ public class EmprestimoController {
     return ResponseEntity.ok(emprestimos);
   }
 
+  @GetMapping("/livro/{livroId}")
+  public ResponseEntity<List<EmprestimoResponseDTO>> obterHistoricoPorLivro(@PathVariable Long livroId) {
+    List<EmprestimoResponseDTO> historico = emprestimoService.obterHistoricoPorLivro(livroId);
+    return ResponseEntity.ok(historico);
+  }
+
   @GetMapping("/{id}")
   public ResponseEntity<EmprestimoResponseDTO> buscarEmprestimoPorId(
       @PathVariable Long id) {
@@ -49,7 +56,15 @@ public class EmprestimoController {
     return ResponseEntity.ok(emprestimosAtivos);
   }
 
-  @PostMapping
+  @GetMapping("/atrasados")
+  public ResponseEntity<List<AtrasadoDTO>> listarAtrasados() {
+
+    List<AtrasadoDTO> atrasados = emprestimoService.listarAtrasados();
+
+    return ResponseEntity.ok(atrasados);
+  }
+
+  @PostMapping("/emprestar")
   public ResponseEntity<EmprestimoResponseDTO> realizarEmprestimo(
       @Valid @RequestBody EmprestimoRequestDTO dto) {
 
@@ -59,7 +74,7 @@ public class EmprestimoController {
         .body(emprestimoCriado);
   }
 
-  @PatchMapping("/{id}/devolucao")
+  @PatchMapping("/{id}/devolver")
   public ResponseEntity<EmprestimoResponseDTO> devolverLivro(
       @PathVariable Long id) {
 

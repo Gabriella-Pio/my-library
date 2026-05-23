@@ -38,6 +38,10 @@ public class Livro {
   @Column(nullable = false)
   private Status status = Status.DISPONIVEL;
 
+  @OneToMany
+  @JoinColumn(name = "livro_id")
+  private java.util.List<Emprestimo> emprestimos;
+
   public Livro(Long id, String titulo, String autor, String isbn, Integer ano, Categoria categoria) {
     this.id = id;
     this.titulo = titulo;

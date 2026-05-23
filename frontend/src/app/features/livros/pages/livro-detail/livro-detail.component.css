@@ -1,0 +1,14 @@
+
+.detail-section {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	width: 100%;
+	max-width: 1100px;
+	margin: 3rem auto 0;
+}
+
+.embedded-empty {
+	margin-top: 0.75rem;
+}
+
