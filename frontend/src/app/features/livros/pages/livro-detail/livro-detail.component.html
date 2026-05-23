@@ -1,0 +1,212 @@
+<div class="main-container">
+  <header class="hero-section">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1 class="hero-title">
+          @if (livro) {
+          Histórico de <span>{{ livro.titulo }}</span>
+          } @else {
+          Histórico do <span>Livro</span>
+          }
+        </h1>
+
+        <p class="hero-subtitle">
+          @if (livro) {
+          Acompanhe os empréstimos realizados para {{ livro.autor }}.
+          } @else {
+          Acompanhe o histórico de empréstimos do livro selecionado.
+          }
+        </p>
+      </div>
+
+      <div class="hero-actions">
+        <a routerLink="/livros" class="btn-secondary">
+          <mat-icon>arrow_back</mat-icon>
+          Voltar para livros
+        </a>
+
+        @if (livro) {
+        <a [routerLink]="['/livros/editar', livro.id]" class="btn-tertiary">
+          <mat-icon>edit</mat-icon>
+          Editar livro
+        </a>
+        }
+      </div>
+    </div>
+  </header>
+
+  @if (loading) {
+  <div class="loading-state">
+    <div class="spinner"></div>
+    <p>Carregando histórico do livro...</p>
+  </div>
+  }
+
+  @if (!loading && erroMensagem) {
+  <div class="empty-state">
+    <mat-icon class="empty-icon">error_outline</mat-icon>
+
+    <p class="empty-title">
+      Não foi possível carregar o histórico
+    </p>
+
+    <p class="empty-desc">
+      {{ erroMensagem }}
+    </p>
+
+    <a routerLink="/livros" class="btn-primary">
+      <mat-icon>arrow_back</mat-icon>
+      Voltar para livros
+    </a>
+  </div>
+  }
+
+  @if (!loading && livro) {
+  <section class="main-grid">
+    <article class="base-card">
+      <div class="base-card-header">
+        <div class="base-icon">
+          <mat-icon>menu_book</mat-icon>
+        </div>
+
+        <span class="badge" [ngClass]="livro.status === 'DISPONIVEL' ? 'badge-success' : 'badge-warning'">
+          <mat-icon>
+            {{ livro.status === 'DISPONIVEL' ? 'check_circle' : 'schedule' }}
+          </mat-icon>
+          {{ livro.status }}
+        </span>
+      </div>
+
+      <div class="card-content">
+        <div>
+          <h2 class="section-title">{{ livro.titulo }}</h2>
+          <p class="section-description">
+            <mat-icon>person</mat-icon>
+            {{ livro.autor }}
+          </p>
+        </div>
+
+        <div class="card-list">
+          <div class="section-description">
+            <mat-icon>category</mat-icon>
+            <span>{{ livro.categoriaNome }}</span>
+          </div>
+
+          <div class="section-description">
+            <mat-icon>calendar_today</mat-icon>
+            <span>{{ livro.ano }}</span>
+          </div>
+
+          <div class="section-description-light">
+            ISBN: {{ livro.isbn }}
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="base-card">
+      <div class="base-card-header">
+        <div class="base-icon base-icon--warning">
+          <mat-icon>history</mat-icon>
+        </div>
+
+        <span class="badge badge-primary">Histórico</span>
+      </div>
+
+      <div class="card-content card-content-compact">
+        <div class="card-list">
+          <div class="section-description">
+            <mat-icon>swap_horiz</mat-icon>
+            <span>Total de empréstimos: {{ totalEmprestimos }}</span>
+          </div>
+
+          <div class="section-description">
+            <mat-icon>schedule</mat-icon>
+            <span>Em andamento: {{ emprestimosAtivos }}</span>
+          </div>
+
+          <div class="section-description">
+            <mat-icon>check_circle</mat-icon>
+            <span>Devolvidos: {{ emprestimosDevolvidos }}</span>
+          </div>
+
+          <div class="section-description">
+            <mat-icon>warning</mat-icon>
+            <span>Com atraso: {{ emprestimosAtrasados }}</span>
+          </div>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section class="detail-section">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Empréstimos deste livro</h2>
+        <p class="section-description">Histórico completo de empréstimos realizados para este título.</p>
+      </div>
+
+      <a routerLink="/emprestimos" class="btn-tertiary">
+        Ver empréstimos
+        <mat-icon>arrow_forward</mat-icon>
+      </a>
+    </div>
+
+    @if (historicoEmprestimos.length === 0) {
+    <div class="empty-state embedded-empty">
+      <mat-icon class="empty-icon">swap_horiz</mat-icon>
+      <p class="empty-title">Nenhum empréstimo registrado</p>
+      <p class="empty-desc">Este livro ainda não possui histórico de empréstimos.</p>
+    </div>
+    } @else {
+    <div class="main-grid">
+      @for (emprestimo of historicoEmprestimos; track emprestimo.id) {
+      <article class="base-card">
+        <div class="base-card-header">
+          <div>
+            <h3 class="section-title">{{ emprestimo.nomePessoa }}</h3>
+            <p class="section-description">{{ emprestimo.telefone }}</p>
+          </div>
+
+          <div class="badge-group">
+            <span class="badge" [ngClass]="statusClasse(emprestimo)">
+              <mat-icon>
+                {{ emprestimo.dataDevolucaoEfetiva ? 'check_circle' : 'schedule' }}
+              </mat-icon>
+              {{ statusTexto(emprestimo) }}
+            </span>
+
+            @if (atrasoTexto(emprestimo)) {
+            <span class="badge badge-danger">
+              <mat-icon>warning</mat-icon>
+              {{ atrasoTexto(emprestimo) }}
+            </span>
+            }
+          </div>
+        </div>
+
+        <div class="card-list">
+          <div class="section-description">
+            <mat-icon>calendar_today</mat-icon>
+            <span>Empréstimo: {{ emprestimo.dataEmprestimo | date:'dd/MM/yyyy' }}</span>
+          </div>
+
+          <div class="section-description">
+            <mat-icon>event</mat-icon>
+            <span>Devolução prevista: {{ emprestimo.dataDevolucaoPrevista | date:'dd/MM/yyyy' }}</span>
+          </div>
+
+          @if (emprestimo.dataDevolucaoEfetiva) {
+          <div class="section-description">
+            <mat-icon>assignment_turned_in</mat-icon>
+            <span>Devolvido em: {{ emprestimo.dataDevolucaoEfetiva | date:'dd/MM/yyyy' }}</span>
+          </div>
+          }
+        </div>
+      </article>
+      }
+    </div>
+    }
+  </section>
+  }
+</div>

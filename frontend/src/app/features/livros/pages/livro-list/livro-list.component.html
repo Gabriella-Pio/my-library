@@ -140,14 +140,19 @@
         </p>
 
         <div class="card-actions">
+          <a [routerLink]="['/livros/historico', livro.id]" class="btn-tertiary btn-action">
+            <mat-icon>history</mat-icon>
+            <!-- Histórico -->
+          </a>
+
           <a [routerLink]="['/livros/editar', livro.id]" class="btn-tertiary btn-action">
             <mat-icon>edit</mat-icon>
-            Editar
+            <!-- Editar -->
           </a>
 
           <button class="btn-tertiary btn-danger btn-action" (click)="deletarLivro(livro)" [disabled]="livro.status !== Status.DISPONIVEL">
             <mat-icon>delete</mat-icon>
-            Excluir
+            <!-- Excluir -->
           </button>
         </div>
       </div>
