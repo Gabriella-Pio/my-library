@@ -1,11 +1,5 @@
 package com.mylibrary.config;
 
-import java.time.LocalDate;
-
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.mylibrary.entity.Categoria;
 import com.mylibrary.entity.Emprestimo;
 import com.mylibrary.entity.Livro;
@@ -13,145 +7,79 @@ import com.mylibrary.entity.Status;
 import com.mylibrary.repository.CategoriaRepository;
 import com.mylibrary.repository.EmprestimoRepository;
 import com.mylibrary.repository.LivroRepository;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
+
+import java.time.LocalDate;
 
 @Component
 public class DataLoader implements CommandLineRunner {
 
-  private final CategoriaRepository categoriaRepository;
-  private final LivroRepository livroRepository;
-  private final EmprestimoRepository emprestimoRepository;
+    private final CategoriaRepository categoriaRepository;
+    private final LivroRepository livroRepository;
+    private final EmprestimoRepository emprestimoRepository;
 
-  public DataLoader(
-      CategoriaRepository categoriaRepository,
-      LivroRepository livroRepository,
-      EmprestimoRepository emprestimoRepository) {
-
-    this.categoriaRepository = categoriaRepository;
-    this.livroRepository = livroRepository;
-    this.emprestimoRepository = emprestimoRepository;
-  }
-
-  @Override
-  @Transactional
-  public void run(String... args) {
-    if (categoriaRepository.count() > 0 || livroRepository.count() > 0 || emprestimoRepository.count() > 0) {
-      return;
+    public DataLoader(CategoriaRepository categoriaRepository,
+            LivroRepository livroRepository,
+            EmprestimoRepository emprestimoRepository) {
+        this.categoriaRepository = categoriaRepository;
+        this.livroRepository = livroRepository;
+        this.emprestimoRepository = emprestimoRepository;
     }
 
-    Categoria tecnologia = garantirCategoria(
-        "Tecnologia",
-        "Livros sobre programação, arquitetura e boas práticas.");
-    Categoria literatura = garantirCategoria(
-        "Literatura",
-        "Obras clássicas e contemporâneas de ficção.");
-    Categoria negocios = garantirCategoria(
-        "Negócios",
-        "Leituras sobre gestão, produtividade e empreendedorismo.");
+    @Override
+    public void run(String... args) throws Exception {
+        Categoria tech = new Categoria();
+        tech.setNome("Tecnologia");
+        tech.setDescricao("Livros sobre desenvolvimento de software e arquitetura");
+        categoriaRepository.save(tech);
 
-    Livro cleanCode = garantirLivro(
-        "Clean Code",
-        "Robert C. Martin",
-        "9780132350884",
-        2008,
-        tecnologia,
-        Status.DISPONIVEL);
+        Categoria ficcao = new Categoria();
+        ficcao.setNome("Ficção");
+        ficcao.setDescricao("Romances, distopias e literatura fantástica");
+        categoriaRepository.save(ficcao);
 
-    Livro pragmaticProgrammer = garantirLivro(
-        "The Pragmatic Programmer",
-        "Andrew Hunt",
-        "9780201616224",
-        1999,
-        tecnologia,
-        Status.EMPRESTADO);
+        Livro cleanCode = new Livro();
+        cleanCode.setTitulo("Clean Code");
+        cleanCode.setAutor("Robert C. Martin");
+        cleanCode.setIsbn("978-0132350884");
+        cleanCode.setAno(2008);
+        cleanCode.setCategoria(tech);
+        cleanCode.setStatus(Status.EMPRESTADO);
+        livroRepository.save(cleanCode);
 
-    Livro hobbit = garantirLivro(
-        "O Hobbit",
-        "J. R. R. Tolkien",
-        "9780547928227",
-        1937,
-        literatura,
-        Status.DISPONIVEL);
+        Livro ArqLimpa = new Livro();
+        ArqLimpa.setTitulo("Arquitetura Limpa");
+        ArqLimpa.setAutor("Robert C. Martin");
+        ArqLimpa.setIsbn("978-8550804606");
+        ArqLimpa.setAno(2018);
+        ArqLimpa.setCategoria(tech);
+        ArqLimpa.setStatus(Status.EMPRESTADO);
+        livroRepository.save(ArqLimpa);
 
-    Livro paiRicoPaiPobre = garantirLivro(
-        "Pai Rico, Pai Pobre",
-        "Robert T. Kiyosaki",
-        "9788535203401",
-        1997,
-        negocios,
-        Status.DISPONIVEL);
+        Livro duna = new Livro();
+        duna.setTitulo("Duna");
+        duna.setAutor("Frank Herbert");
+        duna.setIsbn("978-8525055972");
+        duna.setAno(1965);
+        duna.setCategoria(ficcao);
+        duna.setStatus(Status.DISPONIVEL);
+        livroRepository.save(duna);
 
-    if (emprestimoRepository.count() == 0) {
-      criarEmprestimo(
-          pragmaticProgrammer,
-          "Marina Souza",
-          "(62) 99999-9999",
-          LocalDate.now().minusDays(3),
-          LocalDate.now().plusDays(7),
-          null);
+        Emprestimo emp1 = new Emprestimo();
+        emp1.setLivro(cleanCode);
+        emp1.setNomePessoa("José Eduardo");
+        emp1.setTelefone("62999998888");
+        emp1.setDataEmprestimo(LocalDate.now().minusDays(3));
+        emp1.setDataDevolucaoPrevista(LocalDate.now().plusDays(4));
+        emprestimoRepository.save(emp1);
 
-      criarEmprestimo(
-          hobbit,
-          "Carlos Lima",
-          "(62) 98888-7777",
-          LocalDate.now().minusDays(18),
-          LocalDate.now().minusDays(4),
-          LocalDate.now().minusDays(2));
-
-      pragmaticProgrammer.setStatus(Status.EMPRESTADO);
-      hobbit.setStatus(Status.DISPONIVEL);
-
-      livroRepository.save(pragmaticProgrammer);
-      livroRepository.save(hobbit);
+        Emprestimo emp2 = new Emprestimo();
+        emp2.setLivro(ArqLimpa);
+        emp2.setNomePessoa("Ana Clara");
+        emp2.setTelefone("62988887777");
+        emp2.setDataEmprestimo(LocalDate.now().minusDays(15));
+        emp2.setDataDevolucaoPrevista(LocalDate.now().minusDays(5));
+        emprestimoRepository.save(emp2);
     }
-
-    cleanCode.setStatus(Status.DISPONIVEL);
-    paiRicoPaiPobre.setStatus(Status.DISPONIVEL);
-    livroRepository.save(cleanCode);
-    livroRepository.save(paiRicoPaiPobre);
-  }
-
-  private Categoria garantirCategoria(String nome, String descricao) {
-    return categoriaRepository.findByNome(nome)
-        .orElseGet(() -> categoriaRepository.save(new Categoria(nome, descricao)));
-  }
-
-  private Livro garantirLivro(
-      String titulo,
-      String autor,
-      String isbn,
-      Integer ano,
-      Categoria categoria,
-      Status status) {
-
-    return livroRepository.findByIsbn(isbn)
-        .orElseGet(() -> {
-          Livro livro = new Livro();
-          livro.setTitulo(titulo);
-          livro.setAutor(autor);
-          livro.setIsbn(isbn);
-          livro.setAno(ano);
-          livro.setCategoria(categoria);
-          livro.setStatus(status);
-          return livroRepository.save(livro);
-        });
-  }
-
-  private void criarEmprestimo(
-      Livro livro,
-      String nomePessoa,
-      String telefone,
-      LocalDate dataEmprestimo,
-      LocalDate dataDevolucaoPrevista,
-      LocalDate dataDevolucaoEfetiva) {
-
-    Emprestimo emprestimo = new Emprestimo();
-    emprestimo.setLivro(livro);
-    emprestimo.setNomePessoa(nomePessoa);
-    emprestimo.setTelefone(telefone);
-    emprestimo.setDataEmprestimo(dataEmprestimo);
-    emprestimo.setDataDevolucaoPrevista(dataDevolucaoPrevista);
-    emprestimo.setDataDevolucaoEfetiva(dataDevolucaoEfetiva);
-
-    emprestimoRepository.save(emprestimo);
-  }
 }
