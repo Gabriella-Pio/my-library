@@ -1,0 +1,238 @@
+<div class="main-container">
+  <header class="hero-section dashboard-hero">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1 class="hero-title">
+          Visão geral da <span>biblioteca</span>
+        </h1>
+
+        <p class="hero-subtitle">
+          Acompanhe livros, empréstimos ativos e itens em atraso em um único painel.
+        </p>
+      </div>
+
+      <div class="hero-actions">
+        <a routerLink="/categorias" class="btn-secondary">
+          <mat-icon>category</mat-icon>
+          Ver categorias
+        </a>
+
+        <a routerLink="/livros" class="btn-secondary">
+          <mat-icon>menu_book</mat-icon>
+          Ver livros
+        </a>
+
+        <a routerLink="/emprestimos" class="btn-secondary">
+          <mat-icon>swap_horiz</mat-icon>
+          Ver empréstimos
+        </a>
+
+        <a routerLink="/atrasados" class="btn-primary">
+          <mat-icon>warning</mat-icon>
+          Ver atrasados
+        </a>
+      </div>
+    </div>
+  </header>
+
+  @if (loading) {
+  <div class="loading-state">
+    <div class="spinner"></div>
+    <p>Carregando dashboard...</p>
+  </div>
+  }
+
+  @if (!loading && erroMensagem) {
+  <div class="empty-state">
+    <mat-icon class="empty-icon">error_outline</mat-icon>
+
+    <p class="empty-title">
+      Não foi possível carregar o dashboard
+    </p>
+
+    <p class="empty-desc">
+      {{ erroMensagem }}
+    </p>
+  </div>
+  }
+
+  @if (!loading && resumo) {
+  <section class="main-grid">
+    <div class="base-card">
+      <div class="card-content card-content-compact">
+        <div class="base-icon">
+          <mat-icon>category</mat-icon>
+        </div>
+        <p class="section-description">Categorias</p>
+        <strong class="stat-value">{{ resumo.totalCategorias }}</strong>
+      </div>
+    </div>
+
+    <div class="base-card">
+      <div class="card-content card-content-compact">
+        <div class="base-icon">
+          <mat-icon>library_books</mat-icon>
+        </div>
+        <p class="section-description">Total de livros</p>
+        <strong class="stat-value">{{ resumo.totalLivros }}</strong>
+      </div>
+    </div>
+
+    <div class="base-card">
+      <div class="card-content card-content-compact">
+        <div class="base-icon">
+          <mat-icon>swap_horiz</mat-icon>
+        </div>
+        <p class="section-description">Emprestados</p>
+        <strong class="stat-value">{{ resumo.livrosEmprestados }}</strong>
+      </div>
+    </div>
+
+    <div class="base-card">
+      <div class="card-content card-content-compact">
+        <div class="base-icon base-icon--success">
+          <mat-icon>check_circle</mat-icon>
+        </div>
+        <p class="section-description">Disponíveis</p>
+        <strong class="stat-value">{{ resumo.livrosDisponiveis }}</strong>
+      </div>
+    </div>
+
+
+    <div class="base-card">
+      <div class="card-content card-content-compact">
+        <div class="base-icon base-icon--warning">
+          <mat-icon>schedule</mat-icon>
+        </div>
+        <p class="section-description">Empréstimos ativos</p>
+        <strong class="stat-value">{{ resumo.emprestimosAtivos }}</strong>
+      </div>
+    </div>
+
+    <div class="base-card">
+      <div class="card-content card-content-compact">
+        <div class="base-icon base-icon--danger">
+          <mat-icon>warning</mat-icon>
+        </div>
+        <p class="section-description">Em atraso</p>
+        <strong class="stat-value">{{ resumo.emprestimosAtrasados }}</strong>
+      </div>
+    </div>
+  </section>
+
+  <section class="dashboard-section">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Últimos empréstimos</h2>
+        <p class="section-description">Os 5 empréstimos mais recentes realizados pela biblioteca.</p>
+      </div>
+
+      <a routerLink="/emprestimos" class="btn-tertiary">
+        Ver todos
+        <mat-icon>arrow_forward</mat-icon>
+      </a>
+    </div>
+
+    @if (ultimosEmprestimos.length === 0) {
+    <div class="empty-state embedded-empty">
+      <mat-icon class="empty-icon">swap_horiz</mat-icon>
+      <p class="empty-title">Nenhum empréstimo encontrado</p>
+      <p class="empty-desc">Ainda não há registros recentes para exibir.</p>
+    </div>
+    } @else {
+    <div class="main-grid overdue-preview-grid">
+      @for (item of ultimosEmprestimos; track item.id) {
+      <article class="base-card">
+        <div class="base-card-header">
+          <div class="dashboard-card-title-group">
+            <h3 class="section-title">{{ item.livroTitulo }}</h3>
+            <p class="section-description">{{ item.nomePessoa }}</p>
+          </div>
+
+          <div class="badge-group">
+            <span class="badge" [ngClass]="item.dataDevolucaoEfetiva ? 'badge-success' : 'badge-warning'">
+              <mat-icon>
+                {{ item.dataDevolucaoEfetiva ? 'check_circle' : 'schedule' }}
+              </mat-icon>
+              {{ item.dataDevolucaoEfetiva ? 'Devolvido' : 'Ativo' }}
+            </span>
+          </div>
+        </div>
+
+        <div class="card-list">
+          <div class="section-description">
+            <mat-icon>calendar_today</mat-icon>
+            <span>
+              Empréstimo: {{ item.dataEmprestimo | date:'dd/MM/yyyy' }}
+            </span>
+          </div>
+
+          <div class="section-description">
+            <mat-icon>event</mat-icon>
+            <span>
+              Devolução prevista: {{ item.dataDevolucaoPrevista | date:'dd/MM/yyyy' }}
+            </span>
+          </div>
+        </div>
+      </article>
+      }
+    </div>
+    }
+  </section>
+
+  <section class="dashboard-section">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Atrasados</h2>
+        <p class="section-description">Empréstimos que já passaram da data prevista de devolução.</p>
+      </div>
+
+      <a routerLink="/atrasados" class="btn-tertiary">
+        Ver todos
+        <mat-icon>arrow_forward</mat-icon>
+      </a>
+    </div>
+
+    @if (atrasados.length === 0) {
+    <div class="empty-state embedded-empty">
+      <mat-icon class="empty-icon">check_circle</mat-icon>
+      <p class="empty-title">Nenhum empréstimo em atraso</p>
+      <p class="empty-desc">A biblioteca está com as devoluções em dia.</p>
+    </div>
+    } @else {
+    <div class="main-grid overdue-preview-grid">
+      @for (item of atrasados | slice:0:3; track item.emprestimoId) {
+      <article class="base-card">
+        <div class="base-card-header">
+          <div class="dashboard-card-title-group">
+            <h3 class="section-title">{{ item.livroTitulo }}</h3>
+            <p class="section-description">{{ item.nomePessoa }}</p>
+          </div>
+
+          <span class="badge badge-danger">
+            <mat-icon>warning</mat-icon>
+            {{ item.diasAtraso }} dias
+          </span>
+        </div>
+
+        <div class="card-list">
+          <div class="section-description">
+            <mat-icon>phone</mat-icon>
+            <span>{{ item.telefone }}</span>
+          </div>
+
+          <div class="section-description">
+            <mat-icon>event</mat-icon>
+            <span>
+              Previsto para:
+              {{ item.dataDevolucaoPrevista | date:'dd/MM/yyyy' }}
+            </span>
+          </div>
+        </div>
+      </article>
+      }
+    </div>
+    }
+  </section>
+  }
+</div>

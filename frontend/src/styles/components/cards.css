@@ -1,0 +1,186 @@
+/* cards.css */
+.card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  height: 100%;
+}
+
+.card-content-compact {
+  gap: 0.5rem;
+}
+
+.base-card {
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-main);
+  padding: 1.5rem;
+  height: 100%;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.base-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--primary-border-soft);
+  box-shadow: var(--primary-soft-hover);
+}
+
+.base-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.base-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background-color: var(--primary-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.base-icon mat-icon {
+  color: var(--primary-color);
+}
+
+.base-icon--success {
+  background: rgba(22, 163, 74, 0.1);
+}
+
+.base-icon--success mat-icon {
+  color: #16a34a;
+}
+
+.base-icon--warning {
+  background: rgba(234, 179, 8, 0.1);
+}
+
+.base-icon--warning mat-icon {
+  color: #eab308;
+}
+
+.base-icon--danger {
+  background: rgba(220, 38, 38, 0.1);
+}
+
+.base-icon--danger mat-icon {
+  color: #dc2626;
+}
+
+.card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  width: 100%;
+  margin-top: 1.2rem;
+}
+
+.card-actions .btn-action {
+  flex: 1 1 0;
+  width: auto;
+  min-width: 0;
+}
+
+.card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* card de criar novo objeto (livro, categoria, etc) */
+.create-card {
+  text-decoration: none;
+  border: 2px dashed var(--primary-border-soft);
+  background:
+    linear-gradient(
+      135deg,
+        var(--primary-soft),
+        var(--primary-soft-hover)
+    );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 280px;
+  box-shadow: 0 1px 0 var(--primary-soft) inset;
+  transition:
+    transform 0.15s ease,
+    border-color 0.15s ease,
+    background 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.create-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--primary-border-soft);
+  background:
+    linear-gradient(
+      135deg,
+      var(--primary-soft),
+      var(--primary-soft-hover)
+      rgba(99, 102, 241, 0.06)
+    );
+  box-shadow:
+    0 16px 32px -16px var(--primary-soft-hover);
+}
+
+/* cards.css também? */
+.create-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.25rem;
+  max-width: 240px;
+}
+
+.create-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 22px;
+  background: linear-gradient(135deg, var(--primary-soft), var(--primary-soft-hover));
+  border: 1px solid var(--primary-border-soft);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.create-icon mat-icon {
+  font-size: 2rem;
+  width: 2rem;
+  height: 2rem;
+  color: var(--primary-color);
+}
+
+.create-title {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 0.45rem;
+  letter-spacing: -0.02em;
+}
+
+.create-description {
+  color: var(--text-muted);
+  line-height: 1.6;
+  font-size: 0.92rem;
+}
+
+@media (max-width: 640px) {
+  .card-actions {
+    flex-direction: column;
+  }
+
+  .card-actions .btn-tertiary {
+    justify-content: center;
+  }
+}

@@ -1,0 +1,190 @@
+<div class="main-container">
+
+  <header class="hero-section">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1 class="hero-title">
+          @if (modoEdicao) {
+          Editar <span>Livro</span>
+          }
+
+          @if (!modoEdicao) {
+          Novo <span>Livro</span>
+          }
+        </h1>
+
+        <p class="hero-subtitle">
+          @if (modoEdicao) {
+          Atualize as informações do livro.
+          }
+
+          @if (!modoEdicao) {
+          Adicione um novo livro à sua biblioteca.
+          }
+        </p>
+      </div>
+    </div>
+  </header>
+
+  @if (loading) {
+  <div class="loading-state">
+    <div class="spinner"></div>
+    <p>Carregando livro...</p>
+  </div>
+  }
+
+  @if (!loading) {
+  <div class="form-wrapper">
+    <form [formGroup]="form" (ngSubmit)="salvar()" class="form-card">
+      <div class="form-group">
+        <label class="form-label">
+          Título do livro
+          <span class="form-required">*</span>
+        </label>
+        <input type="text" class="form-input" placeholder="Ex: Clean Code" formControlName="titulo" [class.is-invalid]="titulo?.invalid && titulo?.touched" />
+
+        @if (titulo?.errors?.['required'] && titulo?.touched) {
+        <span class="error-message">
+          O título do livro é obrigatório.
+        </span>
+        }
+
+        @if (titulo?.errors?.['maxlength'] && titulo?.touched) {
+        <span class="error-message">
+          O título deve ter no máximo 255 caracteres.
+        </span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">
+          Autor do livro
+          <span class="form-required">*</span>
+        </label>
+        <input type="text" class="form-input" placeholder="Ex: Robert C. Martin" formControlName="autor" [class.is-invalid]="autor?.invalid && autor?.touched" />
+
+        @if (autor?.errors?.['required'] && autor?.touched) {
+        <span class="error-message">
+          O autor do livro é obrigatório.
+        </span>
+        }
+
+        @if (autor?.errors?.['maxlength'] && autor?.touched) {
+        <span class="error-message">
+          O autor deve ter no máximo 255 caracteres.
+        </span>
+        }
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">
+            ISBN
+            <span class="form-required">*</span>
+          </label>
+          <input type="text" class="form-input" placeholder="Ex: 978-013-235-088-4" formControlName="isbn" [class.is-invalid]="isbn?.invalid && isbn?.touched" />
+
+          @if (isbn?.errors?.['required'] && isbn?.touched) {
+          <span class="error-message">
+            O ISBN é obrigatório.
+          </span>
+          }
+
+          @if (isbn?.errors?.['pattern'] && isbn?.touched) {
+          <span class="error-message">
+            O ISBN deve conter apenas números e hífen (10-20 caracteres).
+          </span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">
+            Ano de publicação
+            <span class="form-required">*</span>
+          </label>
+          <input type="number" class="form-input" placeholder="Ex: 2008" formControlName="ano" min="1000" max="9999" [class.is-invalid]="ano?.invalid && ano?.touched" />
+
+          @if (ano?.errors?.['required'] && ano?.touched) {
+          <span class="error-message">
+            O ano é obrigatório.
+          </span>
+          }
+
+          @if ((ano?.errors?.['min'] || ano?.errors?.['max']) && ano?.touched) {
+          <span class="error-message">
+            O ano deve ser um valor válido (1000-9999).
+          </span>
+          }
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">
+            Categoria
+            <span class="form-required">*</span>
+          </label>
+          <select class="form-select" formControlName="categoriaId" [class.is-invalid]="categoriaId?.invalid && categoriaId?.touched">
+            <option [value]="" disabled>Selecione uma categoria</option>
+            @for (categoria of categorias; track categoria.id) {
+            <option [value]="categoria.id">
+              {{ categoria.nome }}
+            </option>
+            }
+          </select>
+
+          @if (categoriaId?.errors?.['required'] && categoriaId?.touched) {
+          <span class="error-message">
+            A categoria é obrigatória.
+          </span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">
+            Status
+            <span class="form-required">*</span>
+          </label>
+          <select class="form-select" formControlName="status" [class.is-invalid]="status?.invalid && status?.touched" [disabled]="true">
+            <option [value]="Status.DISPONIVEL">{{ Status.DISPONIVEL }}</option>
+          </select>
+
+          <div class="hint">O status é automaticamente DISPONÍVEL e não pode ser alterado aqui.</div>
+
+          @if (status?.errors?.['required'] && status?.touched) {
+          <span class="error-message">
+            O status é obrigatório.
+          </span>
+          }
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <a routerLink="/livros" class="btn-secondary">
+          <mat-icon>arrow_back</mat-icon>
+          Cancelar
+        </a>
+
+        <button type="submit" class="btn-primary" [disabled]="salvando">
+
+          @if (!salvando) {
+          <mat-icon>save</mat-icon>
+
+          @if (modoEdicao) {
+          Salvar alterações
+          }
+
+          @if (!modoEdicao) {
+          Criar livro
+          }
+          }
+
+          @if (salvando) {
+          Salvando...
+          }
+        </button>
+      </div>
+    </form>
+  </div>
+  }
+</div>

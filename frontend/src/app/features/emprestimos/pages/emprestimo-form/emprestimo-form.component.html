@@ -1,0 +1,179 @@
+<div class="main-container">
+
+  <header class="hero-section">
+    <div class="hero-content">
+      <div class="hero-text">
+
+        <h1 class="hero-title">
+          Novo <span>Empréstimo</span>
+        </h1>
+
+        <p class="hero-subtitle">
+          Realize um novo empréstimo de livro.
+        </p>
+
+      </div>
+    </div>
+  </header>
+
+  @if (loading) {
+  <div class="loading-state">
+    <div class="spinner"></div>
+    <p>Processando empréstimo...</p>
+  </div>
+  }
+
+  @if (!loading) {
+
+  <div class="form-wrapper">
+
+    <form class="form-card" #emprestimoForm="ngForm" (ngSubmit)="salvar(emprestimoForm)">
+
+      <!-- LIVRO -->
+      <div class="form-group">
+
+        <label class="form-label">
+          Livro
+          <span class="form-required">*</span>
+        </label>
+
+        <select class="form-select" [(ngModel)]="formData.livroId" name="livroId" required #livroId="ngModel" [class.is-invalid]="(livroId.invalid || formData.livroId === 0) && (livroId.touched || tentouSalvar)">
+
+          <option [ngValue]="0" disabled>
+            Selecione um livro
+          </option>
+
+          @for (
+          livro of livrosDisponiveis;
+          track livro.id
+          ) {
+
+          <option [ngValue]="livro.id">
+            {{ livro.titulo }}
+          </option>
+
+          }
+
+        </select>
+
+        @if ((livroId.invalid || formData.livroId === 0) && (livroId.touched || tentouSalvar)) {
+        <span class="error-message">
+          Selecione um livro.
+        </span>
+        }
+
+      </div>
+
+      <!-- NOME -->
+      <div class="form-group">
+
+        <label class="form-label">
+          Nome da pessoa
+          <span class="form-required">*</span>
+        </label>
+
+        <input type="text" class="form-input" placeholder="Ex: João Silva" [(ngModel)]="formData.nomePessoa" name="nomePessoa" required maxlength="255" #nomePessoa="ngModel" [class.is-invalid]="nomePessoa.invalid && (nomePessoa.touched || tentouSalvar)" />
+
+        @if (nomePessoa.invalid && (nomePessoa.touched || tentouSalvar)) {
+
+        @if (nomePessoa.errors?.['required']) {
+        <span class="error-message">
+          O nome é obrigatório.
+        </span>
+        }
+
+        @if (nomePessoa.errors?.['maxlength']) {
+        <span class="error-message">
+          Máximo de 255 caracteres.
+        </span>
+        }
+
+        }
+
+      </div>
+
+      <!-- TELEFONE -->
+      <div class="form-group">
+
+        <label class="form-label">
+          Telefone
+          <span class="form-required">*</span>
+        </label>
+
+        <input type="text" class="form-input" placeholder="Ex: (62) 99999-9999" [(ngModel)]="formData.telefone" name="telefone" required maxlength="15" pattern="^\(\d{2}\)\s\d{5}-\d{4}$" #telefone="ngModel" (input)="formatarTelefone($event)" [class.is-invalid]="telefone.invalid && (telefone.touched || tentouSalvar)" />
+
+        @if (telefone.invalid && (telefone.touched || tentouSalvar)) {
+
+        @if (telefone.errors?.['required']) {
+        <span class="error-message">
+          O telefone é obrigatório.
+        </span>
+        }
+
+        @if (telefone.errors?.['pattern']) {
+        <span class="error-message">
+          Formato esperado: (62) 99999-9999
+        </span>
+        }
+
+        }
+
+      </div>
+
+      <!-- DATAS -->
+      <div class="form-row">
+        <div class="form-group">
+
+          <label class="form-label">
+            Data de devolução prevista
+            <span class="form-required">*</span>
+          </label>
+
+          <input type="date" class="form-input" [(ngModel)]="formData.dataDevolucaoPrevista" name="dataDevolucaoPrevista" required #dataDevolucaoPrevista="ngModel" [class.is-invalid]="dataDevolucaoPrevista.invalid && (dataDevolucaoPrevista.touched || tentouSalvar)" />
+
+          @if (
+          dataDevolucaoPrevista.invalid &&
+          (dataDevolucaoPrevista.touched || tentouSalvar)
+          ) {
+
+          <span class="error-message">
+            A data de devolução prevista é obrigatória.
+          </span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">
+            Data do empréstimo
+          </label>
+
+          <input type="date" class="form-input" [value]="dataEmprestimoHoje" disabled />
+
+          <div class="hint">
+            A data do empréstimo é gerada automaticamente.
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" (click)="cancelar()">
+          <mat-icon>arrow_back</mat-icon>
+          Cancelar
+        </button>
+
+        <button type="submit" class="btn-primary" [disabled]="loading">
+
+          @if (!loading) {
+          <mat-icon>save</mat-icon>
+          Realizar empréstimo
+          }
+
+          @if (loading) {
+          Salvando...
+          }
+        </button>
+      </div>
+    </form>
+  </div>
+  }
+</div>
