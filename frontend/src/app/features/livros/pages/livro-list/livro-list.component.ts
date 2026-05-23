@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { Subject, debounceTime, switchMap } from 'rxjs';
 
 import { Livro } from '../../models/livro.model';
@@ -14,7 +16,7 @@ import { CategoriaService } from '../../../categorias/services/categoria.service
 @Component({
   selector: 'app-livro-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, MatIconModule],
+  imports: [CommonModule, FormsModule, RouterLink, MatIconModule, MatSnackBarModule, MatTooltipModule],
   templateUrl: './livro-list.component.html',
   styleUrl: './livro-list.component.css',
 })
@@ -40,6 +42,7 @@ export class LivroListComponent implements OnInit {
   constructor(
     private livroService: LivroService,
     private categoriaService: CategoriaService,
+    private snackBar: MatSnackBar,
   ) {}
 
   ngOnInit(): void {
@@ -102,19 +105,37 @@ export class LivroListComponent implements OnInit {
 
   deletarLivro(livro: Livro): void {
     if (livro.status !== Status.DISPONIVEL) {
-      alert('Somente livros disponíveis podem ser excluídos.');
+      this.snackBar.open(
+        `Não é possível excluir. Livro está ${livro.status.toLowerCase()}. Apenas livros disponíveis podem ser excluídos.`,
+        'Fechar',
+        {
+          duration: 5000,
+          panelClass: ['error-snackbar'],
+        }
+      );
       return;
     }
 
-    const ok = confirm('Confirmar exclusão?');
+    const ok = confirm('Confirmar exclusão do livro?');
     if (!ok) return;
 
     this.livroService.deletar(livro.id).subscribe({
       next: () => {
         this.livros = this.livros.filter((l) => l.id !== livro.id);
+        this.snackBar.open('Livro excluído com sucesso.', 'Fechar', {
+          duration: 3000,
+          panelClass: ['success-snackbar'],
+        });
       },
       error: (erro: any) => {
-        alert(erro?.error?.message || 'Erro ao excluir livro.');
+        this.snackBar.open(
+          erro?.error?.message || 'Erro ao excluir livro.',
+          'Fechar',
+          {
+            duration: 5000,
+            panelClass: ['error-snackbar'],
+          }
+        );
       },
     });
   }

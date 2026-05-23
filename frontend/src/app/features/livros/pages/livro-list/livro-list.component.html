@@ -150,7 +150,11 @@
             <!-- Editar -->
           </a>
 
-          <button class="btn-tertiary btn-danger btn-action" (click)="deletarLivro(livro)" [disabled]="livro.status !== Status.DISPONIVEL">
+          <button 
+            class="btn-tertiary btn-danger btn-action" 
+            (click)="deletarLivro(livro)" 
+            [disabled]="livro.status !== Status.DISPONIVEL"
+            [matTooltip]="livro.status === Status.DISPONIVEL ? 'Excluir livro' : 'Não é possível excluir. O livro está ' + (livro.status | lowercase) + '.'">
             <mat-icon>delete</mat-icon>
             <!-- Excluir -->
           </button>
