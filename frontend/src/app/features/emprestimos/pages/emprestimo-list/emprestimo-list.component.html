@@ -27,6 +27,18 @@
           }
         </div>
       </div>
+
+      <div class="hero-actions">
+        <a routerLink="/atrasados" class="btn-secondary">
+          <mat-icon>warning</mat-icon>
+          Ver atrasados
+        </a>
+
+        <a routerLink="/emprestimos/novo" class="btn-primary">
+          <mat-icon>add</mat-icon>
+          Novo empréstimo
+        </a>
+      </div>
     </div>
   </header>
 
@@ -87,25 +99,22 @@
           <mat-icon>menu_book</mat-icon>
         </div>
 
-        <span class="badge" [ngClass]="
-                emprestimo.dataDevolucaoEfetiva
-                  ? 'badge-success'
-                  : 'badge-warning'
-              ">
-          <mat-icon>
-            {{
-            emprestimo.dataDevolucaoEfetiva
-            ? 'check_circle'
-            : 'schedule'
-            }}
-          </mat-icon>
+        <div class="badge-group">
+          <span class="badge" [ngClass]="statusClasse(emprestimo)">
+            <mat-icon>
+              {{ emprestimo.dataDevolucaoEfetiva ? 'check_circle' : 'schedule' }}
+            </mat-icon>
 
-          {{
-          emprestimo.dataDevolucaoEfetiva
-          ? 'Devolvido'
-          : 'Ativo'
-          }}
-        </span>
+            {{ statusTexto(emprestimo) }}
+          </span>
+
+          @if (atrasoTexto(emprestimo)) {
+          <span class="badge badge-danger">
+            <mat-icon>warning</mat-icon>
+            {{ atrasoTexto(emprestimo) }}
+          </span>
+          }
+        </div>
       </div>
 
       <div class="card-content">
