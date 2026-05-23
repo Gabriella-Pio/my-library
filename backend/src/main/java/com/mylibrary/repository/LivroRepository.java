@@ -13,6 +13,8 @@ public interface LivroRepository extends JpaRepository<Livro, Long> {
 
   boolean existsByIsbn(String isbn);
 
+  long countByStatus(Status status);
+
   Optional<Livro> findByIsbn(String isbn);
 
   /*

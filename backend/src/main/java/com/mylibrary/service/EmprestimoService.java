@@ -1,14 +1,17 @@
 package com.mylibrary.service;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mylibrary.dto.AtrasadoDTO;
 import com.mylibrary.dto.EmprestimoRequestDTO;
 import com.mylibrary.dto.EmprestimoResponseDTO;
 import com.mylibrary.exception.BusinessException;
+import com.mylibrary.exception.ResourceNotFoundException;
 import com.mylibrary.entity.Emprestimo;
 import com.mylibrary.entity.Livro;
 import com.mylibrary.entity.Status;
@@ -114,12 +117,35 @@ public class EmprestimoService {
   }
 
   @Transactional(readOnly = true)
+  public List<AtrasadoDTO> listarAtrasados() {
+    LocalDate hoje = LocalDate.now();
+
+    return emprestimoRepository
+        .findByDataDevolucaoEfetivaIsNullAndDataDevolucaoPrevistaBeforeOrderByDataDevolucaoPrevistaAsc(hoje)
+        .stream()
+        .map(emprestimo -> toAtrasadoDTO(emprestimo, hoje))
+        .toList();
+  }
+
+  @Transactional(readOnly = true)
   public EmprestimoResponseDTO buscarPorId(Long id) {
 
     Emprestimo emprestimo = emprestimoRepository.findById(id)
         .orElseThrow(() -> new RuntimeException("Empréstimo não encontrado"));
 
     return toResponseDTO(emprestimo);
+  }
+
+  @Transactional(readOnly = true)
+  public List<EmprestimoResponseDTO> obterHistoricoPorLivro(Long livroId) {
+    if (!livroRepository.existsById(livroId)) {
+      throw new ResourceNotFoundException("Livro não encontrado com ID: " + livroId);
+    }
+
+    return emprestimoRepository.findByLivroIdOrderByDataEmprestimoDesc(livroId)
+        .stream()
+        .map(this::toResponseDTO)
+        .toList();
   }
 
   private EmprestimoResponseDTO toResponseDTO(Emprestimo emprestimo) {
@@ -133,5 +159,19 @@ public class EmprestimoService {
         emprestimo.getDataEmprestimo(),
         emprestimo.getDataDevolucaoPrevista(),
         emprestimo.getDataDevolucaoEfetiva());
+  }
+
+  private AtrasadoDTO toAtrasadoDTO(Emprestimo emprestimo, LocalDate hoje) {
+    long diasAtraso = ChronoUnit.DAYS.between(emprestimo.getDataDevolucaoPrevista(), hoje);
+
+    return new AtrasadoDTO(
+        emprestimo.getId(),
+        emprestimo.getLivro().getId(),
+        emprestimo.getLivro().getTitulo(),
+        emprestimo.getNomePessoa(),
+        emprestimo.getTelefone(),
+        emprestimo.getDataEmprestimo(),
+        emprestimo.getDataDevolucaoPrevista(),
+        (int) diasAtraso);
   }
 }
