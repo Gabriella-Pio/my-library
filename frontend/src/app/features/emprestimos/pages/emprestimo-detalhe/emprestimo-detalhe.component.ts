@@ -56,11 +56,104 @@ export class EmprestimoDetalheComponent implements OnInit {
   }
 
   get statusTexto(): string {
-    return this.emprestimo?.dataDevolucaoEfetiva ? 'Devolvido' : 'Ativo';
+    if (!this.emprestimo) {
+      return 'Ativo';
+    }
+
+    if (this.emprestimo.dataDevolucaoEfetiva) {
+      return 'Devolvido';
+    }
+
+    return this.estaEmAtraso() ? 'Ativo' : 'Ativo';
   }
 
   get statusClasse(): string {
-    return this.emprestimo?.dataDevolucaoEfetiva ? 'badge-success' : 'badge-warning';
+    if (!this.emprestimo) {
+      return 'badge-warning';
+    }
+
+    if (this.emprestimo.dataDevolucaoEfetiva) {
+      return 'badge-success';
+    }
+
+    return this.estaEmAtraso() ? 'badge-warning' : 'badge-warning';
+  }
+
+  get atrasoAtualTexto(): string | null {
+    if (!this.emprestimo || this.emprestimo.dataDevolucaoEfetiva) {
+      return null;
+    }
+
+    const dias = this.diasDeAtraso();
+
+    if (dias <= 0) {
+      return null;
+    }
+
+    return dias === 1
+      ? '1 dia em atraso'
+      : `${dias} dias em atraso`;
+  }
+
+  get atrasoNaDevolucaoTexto(): string | null {
+    if (!this.emprestimo || !this.emprestimo.dataDevolucaoEfetiva) {
+      return null;
+    }
+
+    const dias = this.calcularDiasEntreDatas(
+      this.emprestimo.dataDevolucaoPrevista,
+      this.emprestimo.dataDevolucaoEfetiva,
+    );
+
+    if (dias <= 0) {
+      return null;
+    }
+
+    return dias === 1
+      ? 'Devolvido com 1 dia de atraso'
+      : `Devolvido com ${dias} dias de atraso`;
+  }
+
+  private estaEmAtraso(): boolean {
+    return (
+      !!this.emprestimo &&
+      !this.emprestimo.dataDevolucaoEfetiva &&
+      this.diasDeAtraso() > 0
+    );
+  }
+
+  private diasDeAtraso(): number {
+    if (!this.emprestimo) {
+      return 0;
+    }
+
+    return this.calcularDiasEntreDatas(
+      this.emprestimo.dataDevolucaoPrevista,
+      new Date(),
+    );
+  }
+
+  private calcularDiasEntreDatas(
+    dataInicial: string,
+    dataFinal: Date | string,
+  ): number {
+    const inicio = this.converterParaDataLocal(dataInicial);
+    const fim =
+      typeof dataFinal === 'string'
+        ? this.converterParaDataLocal(dataFinal)
+        : dataFinal;
+
+    fim.setHours(0, 0, 0, 0);
+
+    const diferencaMs = fim.getTime() - inicio.getTime();
+
+    return Math.floor(diferencaMs / (1000 * 60 * 60 * 24));
+  }
+
+  private converterParaDataLocal(data: string): Date {
+    const [ano, mes, dia] = data.split('-').map(Number);
+
+    return new Date(ano, mes - 1, dia);
   }
 
   private exibirErro(mensagem: string): void {

@@ -1,0 +1,113 @@
+<div class="main-container">
+  <header class="hero-section">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1 class="hero-title">
+          Empréstimos <span>atrasados</span>
+        </h1>
+
+        <p class="hero-subtitle">
+          Lista consolidada dos itens que já passaram da data prevista de devolução.
+        </p>
+      </div>
+
+      <div class="hero-actions">
+        <a routerLink="/dashboard" class="btn-secondary">
+          <mat-icon>home</mat-icon>
+          Voltar ao dashboard
+        </a>
+      </div>
+    </div>
+  </header>
+
+  @if (loading) {
+  <div class="loading-state">
+    <div class="spinner"></div>
+    <p>Carregando atrasados...</p>
+  </div>
+  }
+
+  @if (!loading && erroMensagem) {
+  <div class="empty-state">
+    <mat-icon class="empty-icon">error_outline</mat-icon>
+
+    <p class="empty-title">
+      Não foi possível carregar os atrasados
+    </p>
+
+    <p class="empty-desc">
+      {{ erroMensagem }}
+    </p>
+  </div>
+  }
+
+  @if (!loading && !erroMensagem && atrasados.length === 0) {
+  <div class="empty-state">
+    <mat-icon class="empty-icon">check_circle</mat-icon>
+
+    <p class="empty-title">
+      Nenhum empréstimo atrasado
+    </p>
+
+    <p class="empty-desc">
+      Todos os livros estão dentro do prazo de devolução.
+    </p>
+
+    <a routerLink="/emprestimos" class="btn-primary">
+      <mat-icon>swap_horiz</mat-icon>
+      Ver empréstimos
+    </a>
+  </div>
+  }
+
+  @if (!loading && atrasados.length > 0) {
+  <section class="main-grid">
+    @for (item of atrasados; track item.emprestimoId) {
+    <article class="base-card">
+      <div class="base-card-header">
+        <div class="base-icon base-icon--danger">
+          <mat-icon>warning</mat-icon>
+        </div>
+
+        <span class="badge badge-danger">
+          <mat-icon>schedule</mat-icon>
+          {{ item.diasAtraso }} dias em atraso
+        </span>
+      </div>
+
+      <div class="card-content">
+        <div>
+          <h2 class="section-title">{{ item.livroTitulo }}</h2>
+          <p class="section-description">
+            Em nome de <strong>{{ item.nomePessoa }}</strong>
+          </p>
+        </div>
+
+        <div class="card-list">
+          <div class="section-description">
+            <mat-icon>phone</mat-icon>
+            <span>{{ item.telefone }}</span>
+          </div>
+
+          <div class="section-description">
+            <mat-icon>event</mat-icon>
+            <span>
+              Devolução prevista:
+              {{ item.dataDevolucaoPrevista | date:'dd/MM/yyyy' }}
+            </span>
+          </div>
+
+          <div class="section-description">
+            <mat-icon>calendar_today</mat-icon>
+            <span>
+              Empréstimo realizado em:
+              {{ item.dataEmprestimo | date:'dd/MM/yyyy' }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </article>
+    }
+  </section>
+  }
+</div>

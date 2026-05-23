@@ -31,12 +31,28 @@
             <mat-icon>menu_book</mat-icon>
           </div>
 
-          <span class="badge" [ngClass]="statusClasse">
-            <mat-icon>
-              {{ emprestimo.dataDevolucaoEfetiva ? 'check_circle' : 'schedule' }}
-            </mat-icon>
-            {{ statusTexto }}
-          </span>
+          <div class="badge-group">
+            <span class="badge" [ngClass]="statusClasse">
+              <mat-icon>
+                {{ emprestimo.dataDevolucaoEfetiva ? 'check_circle' : 'schedule' }}
+              </mat-icon>
+              {{ statusTexto }}
+            </span>
+
+            @if (atrasoAtualTexto) {
+            <span class="badge badge-danger">
+              <mat-icon>warning</mat-icon>
+              {{ atrasoAtualTexto }}
+            </span>
+            }
+
+            @if (atrasoNaDevolucaoTexto) {
+            <span class="badge badge-danger">
+              <mat-icon>schedule</mat-icon>
+              {{ atrasoNaDevolucaoTexto }}
+            </span>
+            }
+          </div>
         </div>
 
         <div class="card-content">
@@ -69,10 +85,24 @@
               <span>Devolução prevista: {{ emprestimo.dataDevolucaoPrevista | date:'dd/MM/yyyy' }}</span>
             </div>
 
+            @if (atrasoAtualTexto) {
+            <div class="section-description">
+              <mat-icon>warning</mat-icon>
+              <span>{{ atrasoAtualTexto }}</span>
+            </div>
+            }
+
             @if (emprestimo.dataDevolucaoEfetiva) {
             <div class="section-description">
               <mat-icon>assignment_turned_in</mat-icon>
               <span>Devolvido em: {{ emprestimo.dataDevolucaoEfetiva | date:'dd/MM/yyyy' }}</span>
+            </div>
+            }
+
+            @if (atrasoNaDevolucaoTexto) {
+            <div class="section-description">
+              <mat-icon>schedule</mat-icon>
+              <span>{{ atrasoNaDevolucaoTexto }}</span>
             </div>
             }
           </div>
